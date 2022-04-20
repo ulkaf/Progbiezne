@@ -15,6 +15,12 @@ namespace Logic
             this.y = y;
         }
 
+        public static Ball getRecord()
+        {
+            var ba = new Ball(100, 20, 10);
+            return ba;
+        }
+
         public int Size { get => size; set => size = value; }
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }

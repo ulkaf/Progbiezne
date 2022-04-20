@@ -23,6 +23,7 @@ namespace View
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = Logic.Ball.getRecord();
         }
     }
 }
