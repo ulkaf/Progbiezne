@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="600" Width="800" Background="#FFF5D1A3" Foreground="Black" BorderBrush="#FFFB3737">
+    <Grid Margin="100,0,100,100"  Background="#FFF1EDED">
+        <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5"/>
 
     </Grid>
+   
+       
 </Window>
