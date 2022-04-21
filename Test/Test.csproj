@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Nowy folder\**" />
+    <EmbeddedResource Remove="Nowy folder\**" />
+    <None Remove="Nowy folder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
@@ -16,10 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PW\Logic\Logic.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Nowy folder\" />
   </ItemGroup>
 
 </Project>
