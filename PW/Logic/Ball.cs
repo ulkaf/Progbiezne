@@ -20,11 +20,6 @@ namespace Logic
 
         }
 
-        public static Ball getRecord()
-        {
-            var ba = new Ball(100, 20, 10, 5, 5);
-            return ba;
-        }
 
         public int Size { get => size; }
         public int X { get => x; }
