@@ -5,7 +5,7 @@ namespace Model
 {
     public class Board
     {
-        private Ball ball = new Logic.Ball(10, 300, 300);
+        private Ball ball = new Logic.Ball(10, 300, 300,10,10);
 
         public Ball Ball { get => ball; } 
     }
