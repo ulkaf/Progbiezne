@@ -8,6 +8,7 @@ namespace Logic
     {
         public abstract int gridWidth { get; }
         public abstract int gridHeight { get; }
+        public abstract List<Ball> ballsList { get; }
         public abstract void CreateBallsList(int count);
         public abstract void DeleteBalls();
         public abstract void UpdateBalls();
@@ -21,7 +22,7 @@ namespace Logic
     { 
         public override int gridWidth { get; }
         public override int gridHeight { get; }
-        private List<Ball> ballsList { get; }
+        public override List<Ball> ballsList { get; }
 
         public LogicApi(int width, int height)
         {

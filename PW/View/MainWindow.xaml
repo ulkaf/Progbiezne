@@ -9,10 +9,12 @@
     <Grid>
         <Grid Margin="100,0,100,100"  Background="#FFF1EDED">
             <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5">
-               
             </Border>
+            <Ellipse HorizontalAlignment="Center" Height="{Binding BallVal}" Margin="200,202,0,0" Stroke="Black" VerticalAlignment="Top" Width="{Binding BallVal}" Fill="Black"/>
+
         </Grid>
-        <TextBox HorizontalAlignment="Left" Margin="290,504,0,0" TextWrapping="Wrap" Text=""  VerticalAlignment="Top" Width="200" Height="40" TextAlignment="Center" FontSize="24px" BorderBrush="#FF119A33" BorderThickness="3,3,3,3"/>
-       
+        <TextBox HorizontalAlignment="Left" Margin="290,504,0,0" TextWrapping="Wrap" Text="{Binding BallVal}"  VerticalAlignment="Top" Width="200" Height="40" TextAlignment="Center" FontSize="24px" BorderBrush="#FF119A33" BorderThickness="3,3,3,3"/>
+        <Slider Margin="400,0,340,0"/>
+
     </Grid>
 </Window>
