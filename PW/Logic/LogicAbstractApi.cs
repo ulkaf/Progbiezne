@@ -8,8 +8,8 @@ namespace Logic
     {
         public abstract int gridWidth { get; }
         public abstract int gridHeight { get; }
-        public abstract List<Ball> ballsList { get; }
-        public abstract void CreateBallsList(int count);
+        
+        public abstract void CreateBallsList(int count,List<Ball>balls);
         public abstract void DeleteBalls();
         public abstract void UpdateBalls();
         public static LogicAbstractApi CreateApi(int width, int height)
@@ -22,36 +22,38 @@ namespace Logic
     { 
         public override int gridWidth { get; }
         public override int gridHeight { get; }
-        public override List<Ball> ballsList { get; }
+       
 
         public LogicApi(int width, int height)
         {
             this.gridWidth = width;
             this.gridHeight = height;
         }
-        public override void CreateBallsList(int count)
-        {
+        public override void CreateBallsList(int count,List<Ball>balls)
+        {  
             Random random = new Random();
             for (uint i = 0; i < count; ++i)
             {
-                int radius = random.Next(5, 10);
+                int radius = random.Next(10, 30);
                 int x = random.Next(radius, gridWidth - radius);
                 int y = random.Next(radius, gridHeight - radius);
                 int newX = random.Next(radius);
                 int newY = random.Next(radius);
-                ballsList.Add(new Ball(x, y, radius, newX, newY));
+                Ball ball = new Ball(radius,x,y,newX,newY);
+                balls.Add(ball);
             }
+           
         }
         public override void UpdateBalls()
         {
-            foreach (Ball ball in ballsList)
-            {
-                ball.newPosition(gridWidth, gridHeight);
-            }
-        }
+      //      foreach (Ball ball in ballsList)
+       ///     {
+       //         ball.newPosition(gridWidth, gridHeight);
+      //      }
+       }
         public override void DeleteBalls()
         {
-            ballsList.Clear();
+            //ballsList.Clear();
         }
     }
 }

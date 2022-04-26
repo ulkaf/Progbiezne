@@ -3,6 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 
 namespace ViewModel
@@ -12,22 +19,30 @@ namespace ViewModel
     {
         private ModelAbstractApi ModelLayer = ModelAbstractApi.CreateApi();
         private IList<Logic.Ball> b_CirclesCollection;
-        private List<Logic.Ball> b_BallsCollection;
+        private List<Logic.Ball> balls = new List<Logic.Ball>();
+        private List<Ellipse> ballsCollection = new List<Ellipse>();
         private int _BallVal;
         private double xPosition;
         private double yPosition;
-        Logic.Ball ball = new Logic.Ball(50, 200, 200, 10, 10);
-        public MainWindowViewModel() : this(ModelAbstractApi.CreateApi())
+         Logic.LogicAbstractApi LogicLayer = Logic.LogicAbstractApi.CreateApi(600,480);
+        private Canvas canvas;
+        public Canvas Canvas { get => canvas; set => canvas = value; }
+        public MainWindowViewModel() : this(ModelAbstractApi.CreateApi(), Logic.LogicAbstractApi.CreateApi(600, 480))
         {
         }
 
-        public MainWindowViewModel(ModelAbstractApi modelAbstractApi)
+        public MainWindowViewModel(ModelAbstractApi modelAbstractApi, Logic.LogicAbstractApi logicAbstractApi)
         {
             this.ModelLayer = modelAbstractApi;
-            _BallVal = ball.Size;
-            xPosition = (double)ball.X;
-            yPosition = (double)ball.Y;
-            StartCommand = new RelayCommand(ChangeSize);    
+            this.LogicLayer = logicAbstractApi;
+            StartCommand = new RelayCommand(ChangeSize);
+            canvas = new Canvas();
+            canvas.HorizontalAlignment=HorizontalAlignment.Center;
+            canvas.VerticalAlignment=VerticalAlignment.Top;
+            canvas.Width = 600;
+            canvas.Height = 480;
+            canvas.Background = new SolidColorBrush(Color.FromRgb(241, 237, 237));
+            
         }
 
         public ICommand StartCommand
@@ -42,6 +57,13 @@ namespace ViewModel
                 RaisePropertyChanged();
             }
         }
+       
+        public void addBalls(int ballVal)
+        {
+           
+        }
+   
+
 
         public double newYPosition
         {
@@ -61,12 +83,25 @@ namespace ViewModel
                 RaisePropertyChanged();
             }
         }
-         
+
         private void ChangeSize()
         {
-            ball.newPosition(600, 480);
-            newXPosition = (double)ball.X;
-            newYPosition = (double)ball.Y;
+            Start();
+                
+        }
+        private void Start()
+        {   
+            LogicLayer.CreateBallsList(BallVal,balls);
+            for (int i =0; i<balls.Count;i++)
+            {
+                
+                Ellipse ellipse = new Ellipse {Width = balls[i].Size, Height = balls[i].Size, Fill = Brushes.Black };
+                Canvas.SetLeft(ellipse, balls[i].X);
+                Canvas.SetTop(ellipse, balls[i].Y);
+                canvas.Children.Add(ellipse);
+                balls[i].newPosition(600,480);
+            }
+
         }
 
         public IList<Logic.Ball> CirclesCollection
