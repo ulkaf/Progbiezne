@@ -25,28 +25,28 @@ namespace Logic
         public int X { get => x; }
         public int Y { get => y; }
 
-        public void newPosition(int gridWidth, int gridHigh)
+        public void newPosition(int gridWidth, int gridHeight)
         {
-            if (this.x + this.newX >= this.size && this.x + this.newX <= gridWidth - this.size)
+            if (this.x + this.newX >= 0 && this.x + this.newX <= gridWidth - this.size)
                 this.x += this.newX;
             else
             {
-                if (this.x + this.newX > gridWidth - this.size)
+                if (this.newX > 0)
                     this.x = gridWidth - this.size;
                 else
-                    this.x = this.size;
+                    this.x = 0;
 
                 this.newX *= -1;
             }
 
-            if (this.y + this.newY >= this.size && this.y + this.newY <= gridHigh - this.size)
+            if (this.y + this.newY >= 0 && this.y + this.newY <= gridHeight - this.size)
                 this.y += this.newY;
             else
             {
-                if (this.y + this.newY > gridHigh - this.size)
-                    this.y = gridHigh - this.size;
+                if (this.newY > 0)
+                    this.y = gridHeight - this.size;
                 else
-                    this.y = this.size;
+                    this.y = 0;
 
                 this.newY *= -1;
             }

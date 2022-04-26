@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Input;
+
 
 namespace ViewModel
 {
@@ -12,7 +14,9 @@ namespace ViewModel
         private IList<Logic.Ball> b_CirclesCollection;
         private List<Logic.Ball> b_BallsCollection;
         private int _BallVal;
-        Logic.Ball ball = new Logic.Ball(100, 200, 200, 2, 2);
+        private double xPosition;
+        private double yPosition;
+        Logic.Ball ball = new Logic.Ball(50, 200, 200, 10, 10);
         public MainWindowViewModel() : this(ModelAbstractApi.CreateApi())
         {
         }
@@ -21,10 +25,33 @@ namespace ViewModel
         {
             this.ModelLayer = modelAbstractApi;
             _BallVal = ball.Size;
-            
+            xPosition = (double)ball.X;
+            yPosition = (double)ball.Y;
+            StartCommand = new RelayCommand(ChangeSize);    
         }
 
+        public ICommand StartCommand
+        { get; set; }
 
+        public double newXPosition
+        {
+            get { return xPosition; }
+            set
+            {
+                xPosition = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double newYPosition
+        {
+            get { return yPosition; }
+            set
+            {
+                yPosition = value;
+                RaisePropertyChanged();
+            }
+        }
         public int BallVal
         {
             get { return _BallVal; }
@@ -33,6 +60,13 @@ namespace ViewModel
                 _BallVal = value;
                 RaisePropertyChanged();
             }
+        }
+         
+        private void ChangeSize()
+        {
+            ball.newPosition(600, 480);
+            newXPosition = (double)ball.X;
+            newYPosition = (double)ball.Y;
         }
 
         public IList<Logic.Ball> CirclesCollection

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Logic;
+using System.Windows;
+
+
 
 namespace Model
 {
@@ -11,16 +14,15 @@ namespace Model
         {
             return new ModelApi();
         }
-        public abstract List<Ball> AddBalls();
     }
     internal class ModelApi : ModelAbstractApi
     { 
         private LogicAbstractApi LogicLayer = LogicAbstractApi.CreateApi(800,800);
-        public override List<Ball> AddBalls() 
-        {
-            LogicLayer.CreateBallsList(10);
-            return LogicLayer.ballsList;
-        }
+        
+    
+
+    
+     
     }
 
 }

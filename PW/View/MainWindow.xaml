@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800" Background="#FFF5D1A3" Foreground="Black" BorderBrush="#FFFB3737">
     <Grid>
-        <Grid Margin="100,0,100,100"  Background="#FFF1EDED">
-            <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5">
+        <Canvas Margin="100,0,100,100"  Background="#FFF1EDED" Height="480" Width="600">
+            <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5" Height="480" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
             </Border>
-            <Ellipse HorizontalAlignment="Center" Height="{Binding BallVal}" Margin="200,202,0,0" Stroke="Black" VerticalAlignment="Top" Width="{Binding BallVal}" Fill="Black"/>
-
-        </Grid>
-        <TextBox HorizontalAlignment="Left" Margin="290,504,0,0" TextWrapping="Wrap" Text="{Binding BallVal}"  VerticalAlignment="Top" Width="200" Height="40" TextAlignment="Center" FontSize="24px" BorderBrush="#FF119A33" BorderThickness="3,3,3,3"/>
-        <Slider Margin="400,0,340,0"/>
+            <Ellipse HorizontalAlignment="Center" Height="{Binding BallVal}" Canvas.Left="{Binding newXPosition}" Canvas.Top="{Binding newYPosition}" Stroke="Black" VerticalAlignment="Top" Width="{Binding BallVal}" Fill="Black" />
+        </Canvas>
+        <TextBox HorizontalAlignment="Center" Margin="0,514,0,0" TextWrapping="Wrap" Text="{Binding BallVal}"  VerticalAlignment="Top" Width="200" Height="40" TextAlignment="Center" FontSize="24px" BorderBrush="#FF119A33" BorderThickness="3,3,3,3" />
+        <Button Margin="50,494,530,10" Content="START" FontSize="40" Command="{Binding StartCommand}" ></Button>
+        <Button Margin="535,494,45,10" Content="STOP" FontSize="40"></Button>
 
     </Grid>
 </Window>
