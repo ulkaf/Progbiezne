@@ -34,7 +34,7 @@ namespace Logic
             Random random = new Random();
             for (uint i = 0; i < count; ++i)
             {
-                int radius = random.Next(10, 30);
+                int radius = random.Next(20, 40);
                 int x = random.Next(radius, gridWidth - radius);
                 int y = random.Next(radius, gridHeight - radius);
                 int newX = random.Next(radius);
