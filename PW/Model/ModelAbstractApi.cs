@@ -1,22 +1,16 @@
 ﻿
 using Logic;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 
 
 namespace Model
 {
-    public abstract class ModelAbstractApi 
+    public abstract class ModelAbstractApi
     {
         public abstract int width { get; }
         public abstract int height { get; }
@@ -24,6 +18,8 @@ namespace Model
         public abstract List<Ellipse> ellipseCollection { get; }
         public abstract void CreateEllipses(int ballVal);
         public abstract void Move();
+
+        public abstract void Stop();
 
 
         public static ModelAbstractApi CreateApi(int Weight, int Height)
@@ -36,14 +32,14 @@ namespace Model
         public override int width { get; }
         public override int height { get; }
 
-        private LogicAbstractApi LogicLayer;
-        public override List<Ellipse> ellipseCollection { get;}
+        private readonly LogicAbstractApi LogicLayer;
+        public override List<Ellipse> ellipseCollection { get; }
         public override Canvas Canvas { get; set; }
         public ModelApi(int Width, int Height)
         {
-  
-            this.width = Width;
-            this.height = Height;
+
+            width = Width;
+            height = Height;
             LogicLayer = LogicAbstractApi.CreateApi(width, height);
             ellipseCollection = new List<Ellipse>();
             Canvas = new Canvas();
@@ -67,23 +63,28 @@ namespace Model
                 Canvas.Children.Add(ellipse);
             }
             LogicLayer.Start();
-           
+
         }
 
         public override void Move()
         {
             for (int i = 0; i < LogicLayer.balls.Count; i++)
             {
-               
+
                 Canvas.SetLeft(ellipseCollection[i], LogicLayer.balls[i].X);
                 Canvas.SetTop(ellipseCollection[i], LogicLayer.balls[i].Y);
             }
-
+            for (int i = LogicLayer.balls.Count; i < ellipseCollection.Count; i++)
+            {
+             Canvas.Children.Remove(ellipseCollection[ellipseCollection.Count-1]);
+             ellipseCollection.Remove(ellipseCollection[ellipseCollection.Count-1]);
+            }
         }
 
-
-
-
+        public override void Stop()
+        {
+           LogicLayer.Stop();
+        }
     }
 
 }

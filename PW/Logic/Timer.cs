@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Threading;
 
 namespace Logic
@@ -19,11 +17,11 @@ namespace Logic
     }
     internal class BallTimer : TimerApi
     {
-        private DispatcherTimer timer;
+        private readonly DispatcherTimer timer;
 
         public BallTimer()
         {
-            this.timer = new DispatcherTimer();
+            timer = new DispatcherTimer();
         }
 
         public override TimeSpan Interval { get => timer.Interval; set => timer.Interval = value; }
