@@ -28,12 +28,14 @@ namespace ViewModel
             this.ModelLayer = ModelAbstractApi.CreateApi(600, 480);
             StopCommand = new RelayCommand(Stop);
             AddEllipses = new RelayCommand(CreateEllipses);
+           
         }
 
       
         public ICommand StopCommand
         { get; set; }
-        
+       
+
         public int BallVal
         {
             get { return _BallVal; }
@@ -64,7 +66,8 @@ namespace ViewModel
             ModelLayer.Move();
             
         }
+  
 
-       
+
     }
 }

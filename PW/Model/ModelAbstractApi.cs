@@ -52,6 +52,7 @@ namespace Model
             Canvas.Width = width;
             Canvas.Height = height;
             Canvas.Background = new SolidColorBrush(Color.FromRgb(241, 237, 237));
+            LogicLayer.Update += (sender, args) => Move();
         }
         public override void CreateEllipses(int ballVal)
         {
@@ -65,6 +66,7 @@ namespace Model
                 ellipseCollection.Add(ellipse);
                 Canvas.Children.Add(ellipse);
             }
+            LogicLayer.Start();
            
         }
 
@@ -72,7 +74,7 @@ namespace Model
         {
             for (int i = 0; i < LogicLayer.balls.Count; i++)
             {
-                LogicLayer.balls[i].newPosition(600, 480);
+               
                 Canvas.SetLeft(ellipseCollection[i], LogicLayer.balls[i].X);
                 Canvas.SetTop(ellipseCollection[i], LogicLayer.balls[i].Y);
             }
