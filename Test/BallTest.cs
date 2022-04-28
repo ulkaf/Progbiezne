@@ -1,15 +1,15 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Test
 {
     [TestClass]
     public class BallTest
     {
-        Logic.Ball ball = new Ball(1, 5, 5, 2, 2);
+        private readonly Ball ball = new Ball(1, 5, 5, 2, 2);
         [TestMethod]
         public void getSize()
         {
-           Assert.AreEqual(ball.Size, 1);
+            Assert.AreEqual(ball.Size, 1);
         }
         [TestMethod]
         public void getCoordinates()

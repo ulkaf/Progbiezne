@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Logic
+﻿namespace Logic
 {
     public class Ball
     {
-        private int size;
+        private readonly int size;
         private int x;
         private int y;
         private int newX;
@@ -27,28 +25,40 @@ namespace Logic
 
         public void newPosition(int gridWidth, int gridHeight)
         {
-            if (this.x + this.newX >= 0 && this.x + this.newX <= gridWidth - this.size)
-                this.x += this.newX;
+            if (x + newX >= 0 && x + newX <= gridWidth - size)
+            {
+                x += newX;
+            }
             else
             {
-                if (this.newX > 0)
-                    this.x = gridWidth - this.size;
+                if (newX > 0)
+                {
+                    x = gridWidth - size;
+                }
                 else
-                    this.x = 0;
+                {
+                    x = 0;
+                }
 
-                this.newX *= -1;
+                newX *= -1;
             }
 
-            if (this.y + this.newY >= 0 && this.y + this.newY <= gridHeight - this.size)
-                this.y += this.newY;
+            if (y + newY >= 0 && y + newY <= gridHeight - size)
+            {
+                y += newY;
+            }
             else
             {
-                if (this.newY > 0)
-                    this.y = gridHeight - this.size;
+                if (newY > 0)
+                {
+                    y = gridHeight - size;
+                }
                 else
-                    this.y = 0;
+                {
+                    y = 0;
+                }
 
-                this.newY *= -1;
+                newY *= -1;
             }
 
         }

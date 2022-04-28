@@ -1,5 +1,4 @@
-﻿
-using Logic;
+﻿using Logic;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -76,14 +75,14 @@ namespace Model
             }
             for (int i = LogicLayer.balls.Count; i < ellipseCollection.Count; i++)
             {
-             Canvas.Children.Remove(ellipseCollection[ellipseCollection.Count-1]);
-             ellipseCollection.Remove(ellipseCollection[ellipseCollection.Count-1]);
+                Canvas.Children.Remove(ellipseCollection[ellipseCollection.Count - 1]);
+                ellipseCollection.Remove(ellipseCollection[ellipseCollection.Count - 1]);
             }
         }
 
         public override void Stop()
         {
-           LogicLayer.Stop();
+            LogicLayer.Stop();
         }
     }
 

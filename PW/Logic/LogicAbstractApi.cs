@@ -54,7 +54,7 @@ namespace Logic
                     balls.Add(ball);
                 }
             }
-            if (count< 0)
+            if (count < 0)
             {
                 for (int i = count; i < 0; i++)
                 {
