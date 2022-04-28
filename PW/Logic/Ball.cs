@@ -41,6 +41,7 @@
                 }
 
                 newX *= -1;
+              
             }
 
             if (y + newY >= 0 && y + newY <= gridHeight - size)
