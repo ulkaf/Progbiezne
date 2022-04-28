@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Data;
 
 
 namespace Logic
@@ -33,8 +34,10 @@ namespace Logic
         public override int Width { get; }
         public override int Height { get; }
         public override List<Ball> balls { get; }
+        private DataAbstractApi dataLayer;
         public LogicApi(int width, int height, TimerApi WPFTimer)
         {
+            dataLayer = DataAbstractApi.CreateApi();
             Width = width;
             Height = height;
             timer = WPFTimer;
