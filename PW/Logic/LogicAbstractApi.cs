@@ -15,6 +15,10 @@ namespace Logic
         public abstract void Start();
         public abstract void Stop();
         public abstract void SetInterval(int ms);
+        public abstract int GetX(int i);
+        public abstract int GetY(int i);
+        public abstract int GetSize(int i);
+        public abstract int GetCount { get; }
 
         public static LogicAbstractApi CreateApi(int width, int height, TimerApi timer = default(TimerApi))
         {
@@ -68,6 +72,20 @@ namespace Logic
 
         public override event EventHandler Update { add => timer.Tick += value; remove => timer.Tick -= value; }
 
+        public override int GetX(int i)
+        {
+            return balls[i].X;
+        }
+        public override int GetCount { get => balls.Count; }
+  
+        public override int GetY(int i)
+        {
+            return balls[i].Y;
+        }
+        public override int GetSize(int i)
+        {
+            return balls[i].Size;
+        }
         public override void UpdateBalls()
         {
             foreach (Ball ball in balls)

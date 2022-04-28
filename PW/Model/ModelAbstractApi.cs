@@ -31,7 +31,7 @@ namespace Model
         public override int width { get; }
         public override int height { get; }
 
-        private readonly LogicAbstractApi LogicLayer;
+        private LogicAbstractApi LogicLayer;
         public override List<Ellipse> ellipseCollection { get; }
         public override Canvas Canvas { get; set; }
         public ModelApi(int Width, int Height)
@@ -52,12 +52,12 @@ namespace Model
         public override void CreateEllipses(int ballVal)
         {
             LogicLayer.CreateBallsList(ballVal);
-
-            for (int i = LogicLayer.balls.Count - ballVal; i < LogicLayer.balls.Count; i++)
+            
+            for (int i = LogicLayer.GetCount - ballVal; i < LogicLayer.GetCount; i++)
             {
-                Ellipse ellipse = new Ellipse { Width = LogicLayer.balls[i].Size, Height = LogicLayer.balls[i].Size, Fill = Brushes.Black };
-                Canvas.SetLeft(ellipse, LogicLayer.balls[i].X);
-                Canvas.SetTop(ellipse, LogicLayer.balls[i].Y);
+                Ellipse ellipse = new Ellipse { Width = LogicLayer.GetSize(i), Height = LogicLayer.GetSize(i), Fill = Brushes.Black };
+                Canvas.SetLeft(ellipse, LogicLayer.GetX(i));
+                Canvas.SetTop(ellipse, LogicLayer.GetY(i));
                 ellipseCollection.Add(ellipse);
                 Canvas.Children.Add(ellipse);
             }
@@ -67,11 +67,10 @@ namespace Model
 
         public override void Move()
         {
-            for (int i = 0; i < LogicLayer.balls.Count; i++)
+            for (int i = 0; i < LogicLayer.GetCount; i++)
             {
-
-                Canvas.SetLeft(ellipseCollection[i], LogicLayer.balls[i].X);
-                Canvas.SetTop(ellipseCollection[i], LogicLayer.balls[i].Y);
+                Canvas.SetLeft(ellipseCollection[i], LogicLayer.GetX(i));
+                Canvas.SetTop(ellipseCollection[i], LogicLayer.GetY(i));
             }
             for (int i = LogicLayer.balls.Count; i < ellipseCollection.Count; i++)
             {
