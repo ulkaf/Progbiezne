@@ -72,7 +72,7 @@ namespace Model
                 Canvas.SetLeft(ellipseCollection[i], LogicLayer.GetX(i));
                 Canvas.SetTop(ellipseCollection[i], LogicLayer.GetY(i));
             }
-            for (int i = LogicLayer.balls.Count; i < ellipseCollection.Count; i++)
+            for (int i = LogicLayer.GetCount; i < ellipseCollection.Count; i++)
             {
                 Canvas.Children.Remove(ellipseCollection[ellipseCollection.Count - 1]);
                 ellipseCollection.Remove(ellipseCollection[ellipseCollection.Count - 1]);

@@ -10,7 +10,7 @@ namespace Logic
         public abstract event EventHandler Update;
         public abstract int Width { get; }
         public abstract int Height { get; }
-        public abstract List<Ball> balls { get; }
+        internal abstract List<Ball> balls { get; }
         public abstract void CreateBallsList(int count);
         public abstract void UpdateBalls();
         public abstract void Start();
@@ -33,7 +33,7 @@ namespace Logic
 
         public override int Width { get; }
         public override int Height { get; }
-        public override List<Ball> balls { get; }
+        internal override List<Ball> balls { get; }
         private DataAbstractApi dataLayer;
         public LogicApi(int width, int height, TimerApi WPFTimer)
         {
