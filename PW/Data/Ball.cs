@@ -1,4 +1,8 @@
-﻿namespace Logic
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Data
 {
     internal class Ball
     {
@@ -41,7 +45,7 @@
                 }
 
                 newX *= -1;
-              
+
             }
 
             if (y + newY >= 0 && y + newY <= gridHeight - size)
@@ -65,3 +69,4 @@
         }
     }
 }
+

@@ -51,7 +51,7 @@ namespace Model
         }
         public override void CreateEllipses(int ballVal)
         {
-            LogicLayer.CreateBallsList(ballVal);
+            LogicLayer.CreateBalls(ballVal);
             
             for (int i = LogicLayer.GetCount - ballVal; i < LogicLayer.GetCount; i++)
             {
