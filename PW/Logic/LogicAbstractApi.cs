@@ -50,7 +50,7 @@ namespace Logic
 
         public override void Start()
         {
-           // timer.Start();
+            dataLayer.UpdateBallsList();
         }
 
         public override void Stop()
@@ -62,7 +62,7 @@ namespace Logic
 
         public override void UpdateBalls()
         {
-           dataLayer.UpdateBallsList();
+           
         }
 
         public override IList CreateBalls(int count) => dataLayer.CreateBallsList(count);

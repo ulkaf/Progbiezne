@@ -26,6 +26,22 @@ namespace Data
 
 
         public int Size { get => size; }
+        public int NewX { get => newX;
+                set
+            {
+                if (value.Equals(newX)) return;
+                newX = value;
+                
+            }
+        }
+        public int NewY { get => newY;
+            set
+            {
+                if (value.Equals(newY)) return;
+                newY = value;
+
+            }
+        }
         public int X { get => x;
             set
             {
@@ -50,46 +66,9 @@ namespace Data
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void newPosition(int gridWidth, int gridHeight)
-        {
-            if (x + newX >= 0 && x + newX <= gridWidth - size)
-            {
-                x += newX;
-            }
-            else
-            {
-                if (newX > 0)
-                {
-                    x = gridWidth - size;
-                }
-                else
-                {
-                    x = 0;
-                }
+       
 
-                newX *= -1;
-
-            }
-
-            if (y + newY >= 0 && y + newY <= gridHeight - size)
-            {
-                y += newY;
-            }
-            else
-            {
-                if (newY > 0)
-                {
-                    y = gridHeight - size;
-                }
-                else
-                {
-                    y = 0;
-                }
-
-                newY *= -1;
-            }
-
-        }
+        
     }
 }
 

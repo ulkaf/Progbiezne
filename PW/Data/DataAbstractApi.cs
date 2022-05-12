@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -15,6 +17,8 @@ namespace Data
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract void UpdateBallsList();
+
+        public abstract void StopBalls();
         public static DataAbstractApi CreateApi(int width, int height)
         {
             return new DataApi(width,height);
@@ -24,6 +28,8 @@ namespace Data
     internal class DataApi : DataAbstractApi
     {
         private  ObservableCollection<Ball> balls { get; }
+
+        private List<Task> tasks;
         public override int Width { get; }
         public override int Height { get; }
 
@@ -32,6 +38,7 @@ namespace Data
             balls = new ObservableCollection<Ball>();
             Width = width;
             Height = height;
+            tasks = new List<Task>();
         }
 
         public ObservableCollection<Ball> Balls => balls;
@@ -78,14 +85,68 @@ namespace Data
         {
             return balls[i].Size;
         }
-        public override void UpdateBallsList()
-        {
-            foreach (Ball ball in balls)
-            {
-                ball.newPosition(600, 480);
 
+        public int Tasks
+        {
+            get => tasks.Count;
+        }
+
+        public async void UpdateBall(Ball ball) 
+        { while (true)
+            {
+                await Task.Delay(30);
+                if (ball.X + ball.NewX >= 0 && ball.X + ball.NewX <= Width - ball.Size)
+                {
+                    ball.X += ball.NewX;
+                }
+                else
+                {
+                    if (ball.NewX > 0)
+                    {
+                        ball.X = Width - ball.Size;
+                    }
+                    else
+                    {
+                        ball.X = 0;
+                    }
+
+                    ball.NewX *= -1;
+
+                }
+
+                if (ball.Y + ball.NewY >= 0 && ball.Y + ball.NewY <= Height - ball.Size)
+                {
+                    ball.Y += ball.NewY;
+                }
+                else
+                {
+                    if (ball.NewY > 0)
+                    {
+                        ball.Y = Height - ball.Size;
+                    }
+                    else
+                    {
+                        ball.Y = 0;
+                    }
+
+                    ball.NewY *= -1;
+                }
             }
         }
 
+        public override void UpdateBallsList()
+        {
+            for (int i = 0; i < balls.Count; i++)
+            {
+                Ball ball = balls[i];
+
+               tasks.Add(Task.Run(() => UpdateBall(ball)));
+                
+            }
+        }
+        public override void StopBalls()
+        {
+
+        }
     }
 }

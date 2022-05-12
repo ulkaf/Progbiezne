@@ -1,6 +1,5 @@
 ﻿using Model;
 using System.Collections;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ViewModel
