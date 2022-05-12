@@ -83,10 +83,15 @@ namespace ViewModel
   
 
         private void AddBalls()
-        {   if(BallVal>0)
+        {
+            size += BallVal;
+            if(size>0)
             isRunEnabled = true;
-            if (BallVal <= 0)
-                isRunEnabled = false;
+            else
+            {
+                size = 0;
+                isRunEnabled=false;
+            }
             Balls = ModelLayer.Start(BallVal);
             BallVal = 1;
            
