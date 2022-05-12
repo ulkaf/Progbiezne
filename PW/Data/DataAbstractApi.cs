@@ -18,7 +18,6 @@ namespace Data
         public abstract int Height { get; }
         public abstract void UpdateBallsList();
 
-        public abstract void StopBalls();
         public static DataAbstractApi CreateApi(int width, int height)
         {
             return new DataApi(width,height);
@@ -29,18 +28,18 @@ namespace Data
     {
         private  ObservableCollection<Ball> balls { get; }
 
-        private List<Task> tasks;
+    
         public override int Width { get; }
         public override int Height { get; }
 
-        private bool stop = false;
+     
 
         public DataApi( int width, int height)
         {
             balls = new ObservableCollection<Ball>();
             Width = width;
             Height = height;
-            tasks = new List<Task>();
+            
         }
 
         public ObservableCollection<Ball> Balls => balls;
@@ -88,15 +87,11 @@ namespace Data
             return balls[i].Size;
         }
 
-        public int Tasks
-        {
-            get => tasks.Count;
-        }
+   
 
-        public async void UpdateBall(Ball ball) 
-        { while (!stop)
-            {
-                await Task.Delay(30);
+        public  void UpdateBall(Ball ball) 
+        { 
+               
                 if (ball.X + ball.NewX >= 0 && ball.X + ball.NewX <= Width - ball.Size)
                 {
                     ball.X += ball.NewX;
@@ -133,22 +128,19 @@ namespace Data
 
                     ball.NewY *= -1;
                 }
-            }
+            
         }
 
         public override void UpdateBallsList()
-        {   stop = false;
+        {   
             for (int i = 0; i < balls.Count; i++)
             {
                 Ball ball = balls[i];
 
-               tasks.Add(Task.Run(() => UpdateBall(ball)));
+               UpdateBall(ball);
                 
             }
         }
-        public override void StopBalls()
-        {
-            stop = true;
-        }
+
     }
 }

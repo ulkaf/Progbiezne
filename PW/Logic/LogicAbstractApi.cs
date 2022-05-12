@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Data;
 
 
@@ -33,37 +34,47 @@ namespace Logic
        
        
         private DataAbstractApi dataLayer;
-        
+        private List<Task> tasks;
+        private bool stop = false;
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
-           
+            tasks = new List<Task>();
            
         }
-       
 
-        
 
-    
-    
+
+        public int Tasks
+        {
+            get => tasks.Count;
+        }
+
+
 
         public override void Start()
         {
-            dataLayer.UpdateBallsList();
+            stop = false;
+            tasks.Add(Task.Run(() => UpdateBalls()));
+            
         }
 
         public override void Stop()
         {
-         dataLayer.StopBalls();
+         stop = true;
         }
 
 
 
-        public override void UpdateBalls()
+        public override async void UpdateBalls()
         {
-           
-        }
+            while (!stop)
+            {
+                await Task.Delay(30);
+                dataLayer.UpdateBallsList();
+            }
+            }
 
         public override IList CreateBalls(int count) => dataLayer.CreateBallsList(count);
       
