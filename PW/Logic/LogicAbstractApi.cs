@@ -55,7 +55,7 @@ namespace Logic
 
         public override void Stop()
         {
-          //  timer.Stop();
+         dataLayer.StopBalls();
         }
 
 

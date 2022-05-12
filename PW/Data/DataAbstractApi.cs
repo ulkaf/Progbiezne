@@ -33,6 +33,8 @@ namespace Data
         public override int Width { get; }
         public override int Height { get; }
 
+        private bool stop = false;
+
         public DataApi( int width, int height)
         {
             balls = new ObservableCollection<Ball>();
@@ -92,7 +94,7 @@ namespace Data
         }
 
         public async void UpdateBall(Ball ball) 
-        { while (true)
+        { while (!stop)
             {
                 await Task.Delay(30);
                 if (ball.X + ball.NewX >= 0 && ball.X + ball.NewX <= Width - ball.Size)
@@ -135,7 +137,7 @@ namespace Data
         }
 
         public override void UpdateBallsList()
-        {
+        {   stop = false;
             for (int i = 0; i < balls.Count; i++)
             {
                 Ball ball = balls[i];
@@ -146,7 +148,7 @@ namespace Data
         }
         public override void StopBalls()
         {
-
+            stop = true;
         }
     }
 }
