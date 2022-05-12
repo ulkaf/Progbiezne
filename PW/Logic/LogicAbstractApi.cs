@@ -11,8 +11,8 @@ namespace Logic
     {
        
 
-        public abstract int GetX(int i);
-        public abstract int GetY(int i);
+        public abstract double GetX(int i);
+        public abstract double GetY(int i);
         public abstract int GetSize(int i);
         public abstract int GetCount { get; }
         public abstract IList CreateBalls(int count);
@@ -78,13 +78,13 @@ namespace Logic
 
         public override IList CreateBalls(int count) => dataLayer.CreateBallsList(count);
       
-        public override int GetX(int i)
+        public override double GetX(int i)
         {
             return dataLayer.GetX(i);
         }
         public override int GetCount { get => dataLayer.GetCount; }
 
-        public override int GetY(int i)
+        public override double GetY(int i)
         {
             return dataLayer.GetY(i);
         }

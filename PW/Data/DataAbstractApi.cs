@@ -9,9 +9,10 @@ namespace Data
 {
     public abstract class DataAbstractApi
     {
-        public abstract int GetX(int i);
-        public abstract int GetY(int i);
+        public abstract double GetX(int i);
+        public abstract double GetY(int i);
         public abstract int GetSize(int i);
+        public abstract double GetWeight(int i);
         public abstract int GetCount { get; }
         public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
@@ -28,7 +29,8 @@ namespace Data
     {
         private  ObservableCollection<Ball> balls { get; }
 
-    
+        private Random random = new Random();
+
         public override int Width { get; }
         public override int Height { get; }
 
@@ -46,17 +48,18 @@ namespace Data
 
         public override IList CreateBallsList(int count)
         {
-            Random random = new Random();
+            
             if (count > 0)
             {
                 for (uint i = 0; i < count; i++)
                 {
                     int radius = random.Next(20, 40);
-                    int x = random.Next(radius, Width - radius);
-                    int y = random.Next(radius, Height - radius);
-                    int newX = random.Next(radius);
-                    int newY = random.Next(radius);
-                    Ball ball = new Ball(radius, x, y, newX, newY);
+                    double weight = random.Next(30, 60);
+                    double x = random.Next(radius, Width - radius);
+                    double y = random.Next(radius, Height - radius);
+                    double newX = random.Next(radius);
+                    double newY = random.Next(radius);
+                    Ball ball = new Ball(radius, x, y, newX, newY, weight);
                     balls.Add(ball);
                 }
             }
@@ -72,13 +75,13 @@ namespace Data
             }
             return balls;
         }
-        public override int GetX(int i)
+        public override double GetX(int i)
         {
             return balls[i].X;
         }
         public override int GetCount { get => balls.Count; }
 
-        public override int GetY(int i)
+        public override double GetY(int i)
         {
             return balls[i].Y;
         }
@@ -87,6 +90,10 @@ namespace Data
             return balls[i].Size;
         }
 
+        public override double GetWeight(int i)
+        {
+            return balls[i].Weight;
+        }
    
 
         public  void UpdateBall(Ball ball) 

@@ -9,24 +9,25 @@ namespace Data
     internal class Ball : INotifyPropertyChanged
     {
         private readonly int size;
-        private int x;
-        private int y;
-        private int newX;
-        private int newY;
+        private double x;
+        private double y;
+        private double newX;
+        private double newY;
+        private double weight;
 
-        public Ball(int size, int x, int y, int newX, int newY)
+        public Ball(int size, double x, double y, double newX, double newY, double weight)
         {
             this.size = size;
             this.x = x;
             this.y = y;
             this.newX = newX;
             this.newY = newY;
-
+            this.weight = weight;
         }
 
 
         public int Size { get => size; }
-        public int NewX { get => newX;
+        public double NewX { get => newX;
                 set
             {
                 if (value.Equals(newX)) return;
@@ -34,7 +35,7 @@ namespace Data
                 
             }
         }
-        public int NewY { get => newY;
+        public double NewY { get => newY;
             set
             {
                 if (value.Equals(newY)) return;
@@ -42,7 +43,7 @@ namespace Data
 
             }
         }
-        public int X { get => x;
+        public double X { get => x;
             set
             {
                 if (value.Equals(x)) return;
@@ -50,7 +51,7 @@ namespace Data
                 RaisePropertyChanged(nameof(X));
             }
         }
-        public int Y { get => y;
+        public double Y { get => y;
             set
             {
                 if (value.Equals(y)) return;
@@ -58,6 +59,8 @@ namespace Data
                 RaisePropertyChanged(nameof(Y));
             }
         }
+
+        public double Weight { get => weight; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
