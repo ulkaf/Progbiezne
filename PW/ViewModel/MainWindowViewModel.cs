@@ -1,4 +1,5 @@
 ﻿using Model;
+using System.Collections;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -9,6 +10,7 @@ namespace ViewModel
     {
         private readonly ModelAbstractApi ModelLayer;
         private int _BallVal;
+        private IList _balls;
         public ICommand AddCommand { get; set; }
 
         public MainWindowViewModel()
@@ -35,15 +37,12 @@ namespace ViewModel
             }
         }
 
-        public Canvas Canvas
-        {
-            get => ModelLayer.Canvas;
-
-        }
+  
 
         private void CreateEllipses()
         {
-            ModelLayer.CreateEllipses(BallVal);
+            Balls = ModelLayer.Start(BallVal);
+            ModelLayer.StartMoving();
         }
         private void Stop()
         {
@@ -51,7 +50,17 @@ namespace ViewModel
             ModelLayer.Stop();
 
         }
-
+        public IList Balls
+        {
+            get => _balls;
+            set
+            {
+                if (value.Equals(_balls))
+                    return;
+                _balls = value;
+                RaisePropertyChanged(nameof(Balls));
+            }
+        }
 
 
     }

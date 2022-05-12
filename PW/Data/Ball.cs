@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Data
 {
-    internal class Ball
+    internal class Ball : INotifyPropertyChanged
     {
         private readonly int size;
         private int x;
@@ -24,8 +26,29 @@ namespace Data
 
 
         public int Size { get => size; }
-        public int X { get => x; }
-        public int Y { get => y; }
+        public int X { get => x;
+            set
+            {
+                if (value.Equals(x)) return;
+                x = value;
+                RaisePropertyChanged(nameof(X));
+            }
+        }
+        public int Y { get => y;
+            set
+            {
+                if (value.Equals(y)) return;
+                y = value;
+                RaisePropertyChanged(nameof(Y));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public void newPosition(int gridWidth, int gridHeight)
         {

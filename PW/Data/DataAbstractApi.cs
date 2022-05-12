@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Data
 {
@@ -9,7 +11,7 @@ namespace Data
         public abstract int GetY(int i);
         public abstract int GetSize(int i);
         public abstract int GetCount { get; }
-        public abstract void CreateBallsList(int count);
+        public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract void UpdateBallsList();
@@ -21,18 +23,20 @@ namespace Data
 
     internal class DataApi : DataAbstractApi
     {
-        private  List<Ball> balls { get; }
+        private  ObservableCollection<Ball> balls { get; }
         public override int Width { get; }
         public override int Height { get; }
 
         public DataApi( int width, int height)
         {
-            balls = new List<Ball>();
+            balls = new ObservableCollection<Ball>();
             Width = width;
             Height = height;
         }
 
-        public override void CreateBallsList(int count)
+        public ObservableCollection<Ball> Balls => balls;
+
+        public override IList CreateBallsList(int count)
         {
             Random random = new Random();
             if (count > 0)
@@ -58,6 +62,7 @@ namespace Data
                     };
                 }
             }
+            return balls;
         }
         public override int GetX(int i)
         {

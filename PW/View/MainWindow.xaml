@@ -14,9 +14,19 @@
 
 
     <Grid>
-        <ContentPresenter Content="{Binding Canvas}"/>
-        <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5" Height="480" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Canvas Width="600" Height="480" VerticalAlignment="Top" HorizontalAlignment="Center" Background="#f1eded">
+            <ItemsControl Name="Balls" ItemsSource="{Binding Balls, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <Ellipse Stroke="Black" Fill="Black"  Width="{Binding Size}" Height="{Binding Size}" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+             </ItemsControl>
+                    <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5" Height="480" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
         </Border>
+        </Canvas>
         <TextBox HorizontalAlignment="Center" Margin="0,514,0,0" TextWrapping="Wrap" Text="{Binding BallVal}"  VerticalAlignment="Top" Width="200" Height="40" TextAlignment="Center" FontSize="24px" BorderBrush="#FF119A33" BorderThickness="3,3,3,3" />
         <Button Margin="50,494,530,10" Content="ADD" FontSize="40" Command="{Binding AddCommand}" ></Button>
         <Button x:Name= "StopButton" Margin="535,494,45,10" Content="STOP" FontSize="40" Command="{Binding StopCommand}"></Button>
