@@ -88,10 +88,10 @@ namespace Data
             }
         }
 
-        public void Move(double interval)
+        public void Move()
         {
-            X = x + NewX*interval;
-            Y = y + NewY*interval;
+            X = x + NewX;
+            Y = y + NewY;
         }
     
     
@@ -117,7 +117,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move(1);
+                    Move();
                     RaisePropertyChanged();
                 }
                 stopwatch.Stop();
