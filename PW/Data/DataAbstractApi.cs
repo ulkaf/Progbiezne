@@ -17,6 +17,7 @@ namespace Data
         public abstract void SetNewY(int i, double value);
         public abstract int GetSize(int i);
         public abstract double GetWeight(int i);
+        public abstract int GetID(int i);
         public abstract int GetCount { get; }
         public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
@@ -119,7 +120,10 @@ namespace Data
         {
             return balls[i].Weight;
         }
-
+        public override int GetID(int i)
+        {
+            return balls[i].ID;
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -180,21 +184,20 @@ namespace Data
         }
 
 
-    public void BallBounce(Ball ball)
+    public void BallBounce(int ball)
         {
-            for (int i = 0; i < balls.Count; i++)
+            for (int i = 0; i < GetCount; i++)
             {
-                Ball secondBall = balls[i];
-                if (ball.ID == secondBall.ID) continue;
-                if(Collision(ball, secondBall))
+                if (GetID(ball) == GetID(i)) continue;
+                if(Collision(ball, i))
                 {
                  
-                    double m1 = ball.Weight;
-                    double m2 = secondBall.Weight;
-                    double v1x = ball.NewX;
-                    double v1y = ball.NewY;
-                    double v2x = secondBall.NewX;
-                    double v2y = secondBall.NewY;
+                    double m1 = GetWeight(ball);
+                    double m2 = GetWeight(i);
+                    double v1x = GetNewX(ball);
+                    double v1y = GetNewY(ball);
+                    double v2x = GetNewX(i);
+                    double v2y = GetNewY(i);
                 
                          double u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
                          double u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
@@ -202,14 +205,12 @@ namespace Data
                          double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
                          double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
 
-                        ball.NewX = u1x;
-                        ball.NewY = u1y;
-                        secondBall.NewX = u2x;
-                        secondBall.NewY = u2y;
+                        SetNewX(ball, u1x);
+                        SetNewY(ball, u1y);
+                        SetNewX(i, u2x);
+                        SetNewY(i, u2y);
                     
-                }
-
-                  
+                } 
 
             }
 
@@ -218,20 +219,20 @@ namespace Data
 
       
 
-        public bool Collision(Ball a, Ball b)
+        public bool Collision(int a, int b)
         {
-            if (a == null || b == null)
-                return false;
+            /*if (a == null || b == null)
+                return false;*/
 
-            return Distance(a, b) <= (a.Size/2 + b.Size/2);
+            return Distance(a, b) <= (GetSize(a)/2 + GetSize(b)/2);
         }
 
-        private double Distance(Ball a, Ball b)
+        private double Distance(int a, int b)
         {
-            double x1 = a.X + a.Size/2+a.NewX;
-            double y1 = a.Y + a.Size/2+a.NewY;
-            double x2 = b.X + b.Size/2+b.NewY;
-            double y2 = b.Y + b.Size/2+b.NewY;
+            double x1 = GetX(a) + GetSize(a)/2+GetNewX(a);
+            double y1 = GetY(a) + GetSize(a) / 2 + GetNewY(a);
+            double x2 = GetX(b) + GetSize(b) / 2 + GetNewX(b);
+            double y2 = GetY(b) + GetSize(b) / 2 + GetNewY(b);
 
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
