@@ -8,6 +8,7 @@ namespace Data
     internal class Ball : INotifyPropertyChanged
     {
         private readonly int size;
+        private readonly int id;
         private double x;
         private double y;
         private double newX;
@@ -17,8 +18,9 @@ namespace Data
         private Task task;
         private bool stop = false;
 
-        public Ball(int size, double x, double y, double newX, double newY, double weight)
+        public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
+            this.id = identyfikator;
             this.size = size;
             this.x = x;
             this.y = y;
@@ -27,7 +29,7 @@ namespace Data
             this.weight = weight;
         }
 
-
+        public int ID { get => id; }
         public int Size { get => size; }
         public double NewX
         {
@@ -86,12 +88,13 @@ namespace Data
             }
         }
 
-        public void Move(int interval)
+        public void Move(double interval)
         {
-            X = x + NewX;
-            Y = y + NewY;
+            X = x + NewX*interval;
+            Y = y + NewY*interval;
         }
-
+    
+    
         public double Weight { get => weight; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -114,7 +117,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move(interval);
+                    Move(1);
                     RaisePropertyChanged();
                 }
                 stopwatch.Stop();
