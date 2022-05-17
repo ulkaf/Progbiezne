@@ -10,7 +10,11 @@ namespace Data
     public abstract class DataAbstractApi
     {
         public abstract double GetX(int i);
+        public abstract double GetNewX(int i);
+        public abstract void SetNewX(int i, double value);
         public abstract double GetY(int i);
+        public abstract double GetNewY(int i);
+        public abstract void SetNewY(int i, double value);
         public abstract int GetSize(int i);
         public abstract double GetWeight(int i);
         public abstract int GetCount { get; }
@@ -63,7 +67,7 @@ namespace Data
                     double newX = random.Next(1, 10);
                     double newY = random.Next(1, 10);
                     Ball ball = new Ball(i+ballsCount,radius, x, y, newX, newY, weight);
-                    ball.PropertyChanged += BallPositionChanged;
+                    //ball.PropertyChanged += BallPositionChanged;
                     balls.Add(ball);
 
                 }
@@ -84,11 +88,27 @@ namespace Data
         {
             return balls[i].X;
         }
+        public override double GetNewX(int i)
+        {
+            return balls[i].NewX;
+        }
+        public override void SetNewX(int i, double value)
+        {
+            balls[i].NewX = value;
+        }
         public override int GetCount { get => balls.Count; }
 
         public override double GetY(int i)
         {
             return balls[i].Y;
+        }
+        public override double GetNewY(int i)
+        {
+            return balls[i].NewY;
+        }
+        public override void SetNewY(int i, double value)
+        {
+            balls[i].NewY = value;
         }
         public override int GetSize(int i)
         {
@@ -114,8 +134,7 @@ namespace Data
         {
             for (int i = 0; i < balls.Count; i++)
             {
-                Ball ball = balls[i];
-                ball.CreateMovementTask(30);
+                balls[i].CreateMovementTask(30);
 
             }
         }
@@ -124,46 +143,44 @@ namespace Data
         {
             for (int i = 0; i < balls.Count; i++)
             {
-                Ball ball = balls[i];
-
-                ball.Stop();
-
+                balls[i].Stop();
             }
         }
 
-        public void WallCollision(Ball ball)
+
+
+        public void WallCollision(int i)
         {
 
-            double diameter = ball.Size;
+            double diameter = GetSize(i);
 
-            double right = 600 - diameter;
+            double right = Width - diameter;
 
-            double down = 480 - diameter;
+            double down = Height - diameter;
 
 
-            if (ball.X + ball.NewX <= 0)
+            if (GetX(i) + GetNewX(i) <= 0)
             {
-                ball.NewX = -ball.NewX;
+                SetNewX(i, -GetNewX(i));
             }
 
-            if (ball.X + ball.NewX >= right)
+            if (GetX(i) + GetNewX(i) >= right)
             {
-
-                ball.NewX = -ball.NewX;
+                SetNewX(i, -GetNewX(i));
             }
-            if (ball.Y + ball.NewY <= 0)
+            if (GetY(i) + GetNewY(i) <= 0)
             {
-                ball.NewY = -ball.NewY;
+                SetNewY(i, -GetNewY(i));
             }
 
-            if (ball.Y + ball.NewY >= down)
+            if (GetY(i) + GetNewY(i) >= down)
             {
-                ball.NewY = -ball.NewY;
+                SetNewY(i, -GetNewY(i));
             }
         }
 
 
-        public void BallBounce(Ball ball)
+    public void BallBounce(Ball ball)
         {
             for (int i = 0; i < balls.Count; i++)
             {
@@ -219,20 +236,15 @@ namespace Data
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
 
- 
 
-
-
-
-
-        public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
+        /*public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             Ball ball = (Ball)sender;
             mutex.WaitOne();
             WallCollision(ball);
             BallBounce(ball);
             mutex.ReleaseMutex();
-        }
+        }*/
      
     }
 }

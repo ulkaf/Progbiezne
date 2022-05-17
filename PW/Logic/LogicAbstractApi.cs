@@ -9,7 +9,6 @@ namespace Logic
     public abstract class LogicAbstractApi
     {
 
-
         public abstract double GetX(int i);
         public abstract double GetY(int i);
         public abstract int GetSize(int i);
@@ -33,13 +32,13 @@ namespace Logic
 
 
         private readonly DataAbstractApi dataLayer;
-      
+
 
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
-            
+
 
         }
 
@@ -78,5 +77,6 @@ namespace Logic
         {
             return dataLayer.GetSize(i);
         }
+
     }
 }
