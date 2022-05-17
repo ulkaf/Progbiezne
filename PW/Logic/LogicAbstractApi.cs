@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Data;
 
 
 namespace Logic
 {
     public abstract class LogicAbstractApi
     {
-       
+
 
         public abstract double GetX(int i);
         public abstract double GetY(int i);
@@ -18,8 +17,8 @@ namespace Logic
         public abstract IList CreateBalls(int count);
         public abstract void Start();
         public abstract void Stop();
-        
-        public abstract void UpdateBalls();
+
+
 
 
 
@@ -31,53 +30,40 @@ namespace Logic
     }
     internal class LogicApi : LogicAbstractApi
     {
-       
-       
-        private DataAbstractApi dataLayer;
-        private List<Task> tasks;
-        private bool stop = false;
+
+
+        private readonly DataAbstractApi dataLayer;
+      
+
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
-            tasks = new List<Task>();
-           
+            
+
         }
 
-
-
-        public int Tasks
-        {
-            get => tasks.Count;
-        }
 
 
 
         public override void Start()
         {
-            stop = false;
-            tasks.Add(Task.Run(() => UpdateBalls()));
-            
+
+            dataLayer.StartBallMovement();
+
+
         }
 
         public override void Stop()
         {
-         stop = true;
+            dataLayer.stopMovement();
         }
 
 
 
-        public override async void UpdateBalls()
-        {
-            while (!stop)
-            {
-                await Task.Delay(30);
-                dataLayer.UpdateBallsList();
-            }
-            }
 
         public override IList CreateBalls(int count) => dataLayer.CreateBallsList(count);
-      
+
         public override double GetX(int i)
         {
             return dataLayer.GetX(i);

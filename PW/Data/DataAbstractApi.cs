@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Data
 {
@@ -17,38 +17,40 @@ namespace Data
         public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
         public abstract int Height { get; }
-        public abstract void UpdateBallsList();
+        public abstract void stopMovement();
+        public abstract void StartBallMovement();
 
         public static DataAbstractApi CreateApi(int width, int height)
         {
-            return new DataApi(width,height);
+            return new DataApi(width, height);
         }
     }
 
     internal class DataApi : DataAbstractApi
     {
-        private  ObservableCollection<Ball> balls { get; }
+        private ObservableCollection<Ball> balls { get; }
+        private readonly Mutex mutex = new Mutex();
 
-        private Random random = new Random();
+        private readonly Random random = new Random();
 
         public override int Width { get; }
         public override int Height { get; }
 
-     
 
-        public DataApi( int width, int height)
+
+        public DataApi(int width, int height)
         {
             balls = new ObservableCollection<Ball>();
             Width = width;
             Height = height;
-            
+
         }
 
         public ObservableCollection<Ball> Balls => balls;
 
         public override IList CreateBallsList(int count)
         {
-            
+
             if (count > 0)
             {
                 for (uint i = 0; i < count; i++)
@@ -57,10 +59,12 @@ namespace Data
                     double weight = random.Next(30, 60);
                     double x = random.Next(radius, Width - radius);
                     double y = random.Next(radius, Height - radius);
-                    double newX = random.Next(radius);
-                    double newY = random.Next(radius);
+                    double newX = random.Next(5, 15);
+                    double newY = random.Next(5, 15);
                     Ball ball = new Ball(radius, x, y, newX, newY, weight);
+                    ball.PropertyChanged += BallPositionChanged;
                     balls.Add(ball);
+
                 }
             }
             if (count < 0)
@@ -94,60 +98,77 @@ namespace Data
         {
             return balls[i].Weight;
         }
-   
 
-        public  void UpdateBall(Ball ball) 
-        { 
-               
-                if (ball.X + ball.NewX >= 0 && ball.X + ball.NewX <= Width - ball.Size)
-                {
-                    ball.X += ball.NewX;
-                }
-                else
-                {
-                    if (ball.NewX > 0)
-                    {
-                        ball.X = Width - ball.Size;
-                    }
-                    else
-                    {
-                        ball.X = 0;
-                    }
 
-                    ball.NewX *= -1;
 
-                }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-                if (ball.Y + ball.NewY >= 0 && ball.Y + ball.NewY <= Height - ball.Size)
-                {
-                    ball.Y += ball.NewY;
-                }
-                else
-                {
-                    if (ball.NewY > 0)
-                    {
-                        ball.Y = Height - ball.Size;
-                    }
-                    else
-                    {
-                        ball.Y = 0;
-                    }
-
-                    ball.NewY *= -1;
-                }
-            
+        internal void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public override void UpdateBallsList()
-        {   
+
+        public override void StartBallMovement()
+        {
+            for (int i = 0; i < balls.Count; i++)
+            {
+                Ball ball = balls[i];
+                ball.CreateMovementTask(30);
+
+            }
+        }
+
+        public override void stopMovement()
+        {
             for (int i = 0; i < balls.Count; i++)
             {
                 Ball ball = balls[i];
 
-               UpdateBall(ball);
-                
+                ball.Stop();
+
             }
         }
 
+        public void WallCollision(Ball ball)
+        {
+
+            double diameter = ball.Size;
+
+            double right = 600 - diameter;
+
+            double down = 480 - diameter;
+
+
+            if (ball.X <= 0)
+            {
+                ball.NewX = -ball.NewX;
+            }
+
+            if (ball.X >= right)
+            {
+
+                ball.NewX = -ball.NewX;
+            }
+            if (ball.Y <= 0)
+            {
+                ball.NewY = -ball.NewY;
+            }
+
+            if (ball.Y >= down)
+            {
+                ball.NewY = -ball.NewY;
+            }
+        }
+        public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
+        {
+            Ball ball = (Ball)sender;
+            mutex.WaitOne();
+            // UpdateBall(ball);
+            WallCollision(ball);
+            RaisePropertyChanged();
+            mutex.ReleaseMutex();
+        }
+     
     }
 }

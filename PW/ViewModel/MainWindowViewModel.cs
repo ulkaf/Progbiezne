@@ -8,11 +8,11 @@ namespace ViewModel
     public class MainWindowViewModel : BaseViewModel
     {
         private readonly ModelAbstractApi ModelLayer;
-        private int _BallVal =1;
+        private int _BallVal = 1;
         private bool _isStopEnabled = false;
         private bool isStartEnabled = false;
         private bool _isAddEnabled = true;
-        private int size =0;
+        private int size = 0;
         private IList _balls;
         public ICommand AddCommand { get; set; }
         public ICommand RunCommand { get; set; }
@@ -29,15 +29,17 @@ namespace ViewModel
         }
 
 
-    
 
 
-        
 
-        public  bool isStopEnabled
+
+
+        public bool isStopEnabled
         {
             get { return _isStopEnabled; }
-            set { _isStopEnabled = value;
+            set
+            {
+                _isStopEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -46,56 +48,61 @@ namespace ViewModel
         {
             get { return isStartEnabled; }
             set
-            {   
+            {
                 isStartEnabled = value;
                 RaisePropertyChanged();
             }
         }
         public bool isAddEnabled
         {
-            get { return _isAddEnabled;
+            get
+            {
+                return _isAddEnabled;
             }
             set
             {
-                 _isAddEnabled = value;
-              
+                _isAddEnabled = value;
+
                 RaisePropertyChanged();
             }
         }
 
         public int BallVal
         {
-            get {
-                
-                return _BallVal; 
-                 }
+            get
+            {
+
+                return _BallVal;
+            }
             set
             {
-                
+
                 _BallVal = value;
                 RaisePropertyChanged();
-              
+
 
             }
-           
+
         }
 
-  
+
 
         private void AddBalls()
         {
             size += BallVal;
-            if(size>0)
-            isRunEnabled = true;
+            if (size > 0)
+            {
+                isRunEnabled = true;
+            }
             else
             {
                 size = 0;
-                isRunEnabled=false;
+                isRunEnabled = false;
             }
             Balls = ModelLayer.Start(BallVal);
             BallVal = 1;
-           
-           
+
+
         }
         private void Stop()
         {
@@ -109,7 +116,7 @@ namespace ViewModel
             isStopEnabled = true;
             isRunEnabled = false;
             isAddEnabled = false;
-            ModelLayer.StartMoving();    
+            ModelLayer.StartMoving();
         }
         public IList Balls
         {
@@ -117,7 +124,10 @@ namespace ViewModel
             set
             {
                 if (value.Equals(_balls))
+                {
                     return;
+                }
+
                 _balls = value;
                 RaisePropertyChanged();
             }

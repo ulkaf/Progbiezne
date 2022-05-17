@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -13,7 +12,10 @@ namespace Data
         private double y;
         private double newX;
         private double newY;
-        private double weight;
+        private readonly double weight;
+        private readonly Stopwatch stopwatch = new Stopwatch();
+        private Task task;
+        private bool stop = false;
 
         public Ball(int size, double x, double y, double newX, double newY, double weight)
         {
@@ -27,37 +29,67 @@ namespace Data
 
 
         public int Size { get => size; }
-        public double NewX { get => newX;
-                set
-            {
-                if (value.Equals(newX)) return;
-                newX = value;
-                
-            }
-        }
-        public double NewY { get => newY;
+        public double NewX
+        {
+            get => newX;
             set
             {
-                if (value.Equals(newY)) return;
+                if (value.Equals(newX))
+                {
+                    return;
+                }
+
+                newX = value;
+
+            }
+        }
+        public double NewY
+        {
+            get => newY;
+            set
+            {
+                if (value.Equals(newY))
+                {
+                    return;
+                }
+
                 newY = value;
 
             }
         }
-        public double X { get => x;
+        public double X
+        {
+            get => x;
             set
             {
-                if (value.Equals(x)) return;
+                if (value.Equals(x))
+                {
+                    return;
+                }
+
                 x = value;
                 RaisePropertyChanged(nameof(X));
             }
         }
-        public double Y { get => y;
+        public double Y
+        {
+            get => y;
             set
             {
-                if (value.Equals(y)) return;
+                if (value.Equals(y))
+                {
+                    return;
+                }
+
                 y = value;
                 RaisePropertyChanged(nameof(Y));
             }
+        }
+
+        public void Move(int interval)
+        {
+            X = x + NewX;
+            Y = y + NewY;
         }
 
         public double Weight { get => weight; }
@@ -68,10 +100,35 @@ namespace Data
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public void CreateMovementTask(int interval)
+        {
+            this.stop = false;
+            task = Run(interval);
+        }
 
-       
+        private async Task Run(int interval)
+        {
+            while (!stop)
+            {
+                stopwatch.Reset();
+                stopwatch.Start();
+                if (!stop)
+                {
+                    Move(interval);
+                    RaisePropertyChanged();
+                }
+                stopwatch.Stop();
 
-        
+                await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
+            }
+        }
+        public void Stop()
+        {
+            this.stop = true;
+        }
+
+
+
     }
 }
 

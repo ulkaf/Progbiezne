@@ -1,10 +1,5 @@
 ﻿using Logic;
 using System.Collections;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 
 
@@ -15,7 +10,7 @@ namespace Model
         public abstract int width { get; }
         public abstract int height { get; }
 
-        
+
 
         public abstract void StartMoving();
 
@@ -33,23 +28,23 @@ namespace Model
         public override int width { get; }
         public override int height { get; }
 
-        private LogicAbstractApi LogicLayer;
-     
+        private readonly LogicAbstractApi LogicLayer;
+
         public ModelApi(int Width, int Height)
         {
 
             width = Width;
             height = Height;
             LogicLayer = LogicAbstractApi.CreateApi(width, height);
-          
-            
+
+
         }
         public override void StartMoving()
         {
             LogicLayer.Start();
         }
 
-       
+
 
         public override void Stop()
         {
@@ -57,7 +52,7 @@ namespace Model
         }
 
         public override IList Start(int ballVal) => LogicLayer.CreateBalls(ballVal);
-      
+
     }
 
 }
