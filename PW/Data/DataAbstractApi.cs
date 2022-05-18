@@ -162,22 +162,22 @@ namespace Data
             double down = 480 - diameter;
 
 
-            if (ball.X <= 0)
+            if (ball.X + ball.NewX <= 0)
             {
                 ball.NewX = -ball.NewX;
             }
 
-            if (ball.X >= right)
+            if (ball.X + ball.NewX >= right)
             {
 
                 ball.NewX = -ball.NewX;
             }
-            if (ball.Y <= 0)
+            if (ball.Y + ball.NewY <= 0)
             {
                 ball.NewY = -ball.NewY;
             }
 
-            if (ball.Y >= down)
+            if (ball.Y + ball.NewY>= down)
             {
                 ball.NewY = -ball.NewY;
             }
