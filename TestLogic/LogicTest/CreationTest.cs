@@ -1,7 +1,6 @@
 using Logic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-namespace Test
+namespace TestLogic
 {
     [TestClass]
     public class CreationTest
