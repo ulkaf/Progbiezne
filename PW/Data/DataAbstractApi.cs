@@ -68,7 +68,7 @@ namespace Data
                     double newX = random.Next(1, 10);
                     double newY = random.Next(1, 10);
                     Ball ball = new Ball(i+ballsCount,radius, x, y, newX, newY, weight);
-                    //ball.PropertyChanged += BallPositionChanged;
+                    ball.PropertyChanged += BallPositionChanged;
                     balls.Add(ball);
 
                 }
@@ -152,100 +152,101 @@ namespace Data
         }
 
 
-
-        public void WallCollision(int i)
+        public void WallCollision(Ball ball)
         {
 
-            double diameter = GetSize(i);
+            double diameter = ball.Size;
 
-            double right = Width - diameter;
+            double right = 600 - diameter;
 
-            double down = Height - diameter;
+            double down = 480 - diameter;
 
 
-            if (GetX(i) + GetNewX(i) <= 0)
+            if (ball.X <= 0)
             {
-                SetNewX(i, -GetNewX(i));
+                ball.NewX = -ball.NewX;
             }
 
-            if (GetX(i) + GetNewX(i) >= right)
+            if (ball.X >= right)
             {
-                SetNewX(i, -GetNewX(i));
+
+                ball.NewX = -ball.NewX;
             }
-            if (GetY(i) + GetNewY(i) <= 0)
+            if (ball.Y <= 0)
             {
-                SetNewY(i, -GetNewY(i));
+                ball.NewY = -ball.NewY;
             }
 
-            if (GetY(i) + GetNewY(i) >= down)
+            if (ball.Y >= down)
             {
-                SetNewY(i, -GetNewY(i));
+                ball.NewY = -ball.NewY;
             }
         }
 
-
-    public void BallBounce(int ball)
+        public void BallBounce(Ball ball)
         {
-            for (int i = 0; i < GetCount; i++)
+            for (int i = 0; i < balls.Count; i++)
             {
-                if (GetID(ball) == GetID(i)) continue;
-                if(Collision(ball, i))
+                Ball secondBall = balls[i];
+                if (ball.ID == secondBall.ID) continue;
+                if (Collision(ball, secondBall))
                 {
-                 
-                    double m1 = GetWeight(ball);
-                    double m2 = GetWeight(i);
-                    double v1x = GetNewX(ball);
-                    double v1y = GetNewY(ball);
-                    double v2x = GetNewX(i);
-                    double v2y = GetNewY(i);
-                
-                         double u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
-                         double u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
 
-                         double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
-                         double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
+                    double m1 = ball.Weight;
+                    double m2 = secondBall.Weight;
+                    double v1x = ball.NewX;
+                    double v1y = ball.NewY;
+                    double v2x = secondBall.NewX;
+                    double v2y = secondBall.NewY;
 
-                        SetNewX(ball, u1x);
-                        SetNewY(ball, u1y);
-                        SetNewX(i, u2x);
-                        SetNewY(i, u2y);
-                    
-                } 
+                    double u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
+                    double u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
+
+                    double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
+                    double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
+
+                    ball.NewX = u1x;
+                    ball.NewY = u1y;
+                    secondBall.NewX = u2x;
+                    secondBall.NewY = u2y;
+
+                }
+
+
 
             }
 
         }
 
 
-      
 
-        public bool Collision(int a, int b)
+
+        public bool Collision(Ball a, Ball b)
         {
-            /*if (a == null || b == null)
-                return false;*/
+            if (a == null || b == null)
+                return false;
 
-            return Distance(a, b) <= (GetSize(a)/2 + GetSize(b)/2);
+            return Distance(a, b) <= (a.Size / 2 + b.Size / 2);
         }
 
-        private double Distance(int a, int b)
+        private double Distance(Ball a, Ball b)
         {
-            double x1 = GetX(a) + GetSize(a)/2+GetNewX(a);
-            double y1 = GetY(a) + GetSize(a) / 2 + GetNewY(a);
-            double x2 = GetX(b) + GetSize(b) / 2 + GetNewX(b);
-            double y2 = GetY(b) + GetSize(b) / 2 + GetNewY(b);
+            double x1 = a.X + a.Size / 2 + a.NewX;
+            double y1 = a.Y + a.Size / 2 + a.NewY;
+            double x2 = b.X + b.Size / 2 + b.NewY;
+            double y2 = b.Y + b.Size / 2 + b.NewY;
 
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
 
-
-        /*public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
+        public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             Ball ball = (Ball)sender;
             mutex.WaitOne();
             WallCollision(ball);
             BallBounce(ball);
             mutex.ReleaseMutex();
-        }*/
-     
+        }
+
     }
 }
