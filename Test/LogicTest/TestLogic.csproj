@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PW\Logic\Logic.csproj" />
+    <ProjectReference Include="..\..\PW\Logic\Logic.csproj" />
   </ItemGroup>
 
 </Project>
