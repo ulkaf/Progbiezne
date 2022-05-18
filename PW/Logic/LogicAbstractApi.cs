@@ -16,8 +16,10 @@ namespace Logic
         public abstract void Stop();
         public abstract  int Width { get; set; }
         public abstract  int Height { get; set; }
-
-
+        public abstract IBall GetBall(int index);
+        public abstract void WallCollision(IBall ball);
+        public abstract void BallBounce(IBall ball);
+        public abstract void BallPositionChanged(object sender, PropertyChangedEventArgs args);
 
 
 
@@ -63,7 +65,7 @@ namespace Logic
         }
 
 
-        internal void WallCollision(IBall ball)
+        public override void WallCollision(IBall ball)
         {
 
             double diameter = ball.Size;
@@ -97,7 +99,7 @@ namespace Logic
             }
         }
 
-        internal void BallBounce(IBall ball)
+        public override void BallBounce(IBall ball)
         {
             for (int i = 0; i < dataLayer.GetCount; i++)
             {
@@ -173,12 +175,15 @@ namespace Logic
             }
             return temp;
         }
+        public override IBall GetBall(int index)
+        {
+            return dataLayer.GetBall(index);
+        }
 
-       
 
         public override int GetCount { get => dataLayer.GetCount; }
 
-        public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
+        public override void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             IBall ball = (IBall)sender;
             mutex.WaitOne();

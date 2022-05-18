@@ -17,15 +17,15 @@ namespace TestData
             DApi.CreateBallsList(1);
             Assert.AreEqual(0, DApi.GetBall(0).ID);
 
-            Assert.IsTrue(DApi.GetBall(0).X > DApi.GetBall(0).Size);
-            Assert.IsTrue(DApi.GetBall(0).X < (DApi.Width - DApi.GetBall(0).Size));
-            Assert.IsTrue(DApi.GetBall(0).Y > DApi.GetBall(0).Size);
-            Assert.IsTrue(DApi.GetBall(0).Y < (DApi.Height - DApi.GetBall(0).Size));
+            Assert.IsTrue(DApi.GetBall(0).X >= DApi.GetBall(0).Size);
+            Assert.IsTrue(DApi.GetBall(0).X <= (DApi.Width - DApi.GetBall(0).Size));
+            Assert.IsTrue(DApi.GetBall(0).Y >= DApi.GetBall(0).Size);
+            Assert.IsTrue(DApi.GetBall(0).Y <= (DApi.Height - DApi.GetBall(0).Size));
 
-            Assert.IsTrue(DApi.GetBall(0).Size > 20 && DApi.GetBall(0).Size < 40);
-            Assert.IsTrue(DApi.GetBall(0).Weight > 30 && DApi.GetBall(0).Weight < 60);
-            Assert.IsTrue(DApi.GetBall(0).NewX > -10 && DApi.GetBall(0).NewX < 10);
-            Assert.IsTrue(DApi.GetBall(0).NewY > -10 && DApi.GetBall(0).NewY < 10);
+            Assert.IsTrue(DApi.GetBall(0).Size >= 20 && DApi.GetBall(0).Size <= 40);
+            Assert.IsTrue(DApi.GetBall(0).Weight >= 30 && DApi.GetBall(0).Weight <= 60);
+            Assert.IsTrue(DApi.GetBall(0).NewX >= -10 && DApi.GetBall(0).NewX <= 10);
+            Assert.IsTrue(DApi.GetBall(0).NewY >= -10 && DApi.GetBall(0).NewY <= 10);
         }
 
         [TestMethod]
@@ -35,6 +35,8 @@ namespace TestData
             DApi.CreateBallsList(1);
             double x = DApi.GetBall(0).X;
             double y = DApi.GetBall(0).Y;
+            DApi.GetBall(0).NewX = 5;
+            DApi.GetBall(0).NewY = 5;
             DApi.GetBall(0).Move();
             Assert.AreNotEqual(x, DApi.GetBall(0).X);
             Assert.AreNotEqual(y, DApi.GetBall(0).Y);

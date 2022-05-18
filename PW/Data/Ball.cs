@@ -11,7 +11,6 @@ namespace Data
         int ID { get; }
         int Size { get; }
         double Weight { get; }
-
         double X { get; set; }
         double Y { get; set; }
         double NewX { get; set; }
