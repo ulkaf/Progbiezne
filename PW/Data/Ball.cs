@@ -110,8 +110,8 @@ namespace Data
 
         public void Move()
         {
-            X = x + NewX;
-            Y = y + NewY;
+            X +=  NewX;
+            Y +=  NewY;
         }
 
 
