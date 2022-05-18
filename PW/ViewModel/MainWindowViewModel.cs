@@ -28,12 +28,6 @@ namespace ViewModel
 
         }
 
-
-
-
-
-
-
         public bool isStopEnabled
         {
             get { return _isStopEnabled; }
@@ -53,6 +47,7 @@ namespace ViewModel
                 RaisePropertyChanged();
             }
         }
+
         public bool isAddEnabled
         {
             get
@@ -84,8 +79,6 @@ namespace ViewModel
             }
 
         }
-
-
 
         private void AddBalls()
         {

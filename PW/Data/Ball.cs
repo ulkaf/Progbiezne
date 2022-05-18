@@ -88,10 +88,10 @@ namespace Data
             }
         }
 
-        public void Move()
+        public void Move(double dir)
         {
-            X = x + NewX;
-            Y = y + NewY;
+            X = x + NewX*dir;
+            Y = y + NewY*dir;
         }
     
     
@@ -117,7 +117,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move();
+                    Move(1);
                     RaisePropertyChanged();
                 }
                 stopwatch.Stop();

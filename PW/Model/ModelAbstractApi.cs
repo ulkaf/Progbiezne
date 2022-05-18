@@ -9,11 +9,7 @@ namespace Model
     {
         public abstract int width { get; }
         public abstract int height { get; }
-
-
-
         public abstract void StartMoving();
-
         public abstract IList Start(int ballVal);
         public abstract void Stop();
 
@@ -27,9 +23,8 @@ namespace Model
     {
         public override int width { get; }
         public override int height { get; }
-
         private readonly LogicAbstractApi LogicLayer;
-
+       
         public ModelApi(int Width, int Height)
         {
 
@@ -39,11 +34,11 @@ namespace Model
 
 
         }
+
         public override void StartMoving()
         {
             LogicLayer.Start();
         }
-
 
 
         public override void Stop()

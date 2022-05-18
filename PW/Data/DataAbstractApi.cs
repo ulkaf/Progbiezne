@@ -60,16 +60,17 @@ namespace Data
             {
                 int ballsCount = balls.Count;
                 for (int i = 0; i < count; i++)
-                {   
+                {   mutex.WaitOne(); 
                     int radius = random.Next(20, 40);
                     double weight = random.Next(30, 60);
                     double x = random.Next(radius, Width - radius);
                     double y = random.Next(radius, Height - radius);
-                    double newX = random.Next(1, 10);
-                    double newY = random.Next(1, 10);
+                    double newX = random.Next(-10, 10);
+                    double newY = random.Next(-10, 10);
                     Ball ball = new Ball(i+ballsCount,radius, x, y, newX, newY, weight);
                     ball.PropertyChanged += BallPositionChanged;
                     balls.Add(ball);
+                    mutex.ReleaseMutex();
 
                 }
             }
@@ -77,10 +78,14 @@ namespace Data
             {
                 for (int i = count; i < 0; i++)
                 {
+                    
                     if (balls.Count > 0)
                     {
+                        mutex.WaitOne();
                         balls.Remove(balls[balls.Count - 1]);
+                        mutex.ReleaseMutex();
                     };
+                    
                 }
             }
             return balls;
@@ -162,23 +167,26 @@ namespace Data
             double down = 480 - diameter;
 
 
-            if (ball.X + ball.NewX <= 0)
+            if (ball.X  <= 0)
             {
+                ball.X = -ball.X;
                 ball.NewX = -ball.NewX;
             }
 
-            if (ball.X + ball.NewX >= right)
+            else if (ball.X >= right)
             {
-
+                ball.X = right-(ball.X-right);
                 ball.NewX = -ball.NewX;
             }
-            if (ball.Y + ball.NewY <= 0)
+            if (ball.Y <= 0)
             {
+                ball.Y = -ball.Y;
                 ball.NewY = -ball.NewY;
             }
 
-            if (ball.Y + ball.NewY>= down)
+            else if (ball.Y >= down)
             {
+                ball.Y = down-(ball.Y-down);
                 ball.NewY = -ball.NewY;
             }
         }
@@ -191,13 +199,15 @@ namespace Data
                 if (ball.ID == secondBall.ID) continue;
                 if (Collision(ball, secondBall))
                 {
-
+                   
                     double m1 = ball.Weight;
                     double m2 = secondBall.Weight;
                     double v1x = ball.NewX;
                     double v1y = ball.NewY;
                     double v2x = secondBall.NewX;
                     double v2y = secondBall.NewY;
+
+             
 
                     double u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
                     double u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
@@ -209,6 +219,7 @@ namespace Data
                     ball.NewY = u1y;
                     secondBall.NewX = u2x;
                     secondBall.NewY = u2y;
+                    return;
 
                 }
 
@@ -239,12 +250,15 @@ namespace Data
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
 
+  
+
         public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             Ball ball = (Ball)sender;
             mutex.WaitOne();
             WallCollision(ball);
             BallBounce(ball);
+            WallCollision(ball);
             mutex.ReleaseMutex();
         }
 

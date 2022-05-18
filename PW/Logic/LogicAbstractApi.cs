@@ -19,8 +19,6 @@ namespace Logic
 
 
 
-
-
         public static LogicAbstractApi CreateApi(int width, int height)
         {
             return new LogicApi(width, height);
@@ -29,21 +27,13 @@ namespace Logic
     }
     internal class LogicApi : LogicAbstractApi
     {
-
-
         private readonly DataAbstractApi dataLayer;
-
-
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
-
-
+           
         }
-
-
-
 
         public override void Start()
         {
@@ -58,25 +48,25 @@ namespace Logic
             dataLayer.stopMovement();
         }
 
-
-
-
         public override IList CreateBalls(int count) => dataLayer.CreateBallsList(count);
 
         public override double GetX(int i)
         {
             return dataLayer.GetX(i);
         }
+
         public override int GetCount { get => dataLayer.GetCount; }
 
         public override double GetY(int i)
         {
             return dataLayer.GetY(i);
         }
+
         public override int GetSize(int i)
         {
             return dataLayer.GetSize(i);
         }
+
 
     }
 }
