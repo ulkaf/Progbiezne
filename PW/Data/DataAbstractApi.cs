@@ -7,15 +7,7 @@ namespace Data
 {
     public abstract class DataAbstractApi
     {
-        public abstract double GetX(int i);
-        public abstract double GetNewX(int i);
-        public abstract void SetNewX(int i, double value);
-        public abstract double GetY(int i);
-        public abstract double GetNewY(int i);
-        public abstract void SetNewY(int i, double value);
-        public abstract int GetSize(int i);
-        public abstract double GetWeight(int i);
-        public abstract int GetID(int i);
+
         public abstract int GetCount { get; }
         public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
@@ -90,45 +82,10 @@ namespace Data
             }
             return balls;
         }
-        public override double GetX(int i)
-        {
-            return balls[i].X;
-        }
-        public override double GetNewX(int i)
-        {
-            return balls[i].NewX;
-        }
-        public override void SetNewX(int i, double value)
-        {
-            balls[i].NewX = value;
-        }
+
         public override int GetCount { get => balls.Count; }
 
-        public override double GetY(int i)
-        {
-            return balls[i].Y;
-        }
-        public override double GetNewY(int i)
-        {
-            return balls[i].NewY;
-        }
-        public override void SetNewY(int i, double value)
-        {
-            balls[i].NewY = value;
-        }
-        public override int GetSize(int i)
-        {
-            return balls[i].Size;
-        }
 
-        public override double GetWeight(int i)
-        {
-            return balls[i].Weight;
-        }
-        public override int GetID(int i)
-        {
-            return balls[i].ID;
-        }
 
         public override IBall GetBall(int index)
         {

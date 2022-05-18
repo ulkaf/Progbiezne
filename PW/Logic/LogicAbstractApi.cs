@@ -10,13 +10,14 @@ namespace Logic
     public abstract class LogicAbstractApi
     {
 
-        public abstract double GetX(int i);
-        public abstract double GetY(int i);
-        public abstract int GetSize(int i);
         public abstract int GetCount { get; }
         public abstract IList CreateBalls(int count);
         public abstract void Start();
         public abstract void Stop();
+        public abstract  int Width { get; set; }
+        public abstract  int Height { get; set; }
+
+
 
 
 
@@ -30,12 +31,19 @@ namespace Logic
     {
         private readonly DataAbstractApi dataLayer;
         private readonly Mutex mutex = new Mutex();
+        private int width;
+        private int height;
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
+            this.width = width;
+            this.height = height;
 
         }
+
+        public override int Width { get ; set ; }
+        public override int Height { get; set; }
 
         public override void Start()
         {
@@ -61,9 +69,9 @@ namespace Logic
 
             double diameter = ball.Size;
 
-            double right = 600 - diameter;
+            double right = this.width - diameter;
 
-            double down = 480 - diameter;
+            double down = this.height - diameter;
 
 
             if (ball.X <= 0)
@@ -167,29 +175,16 @@ namespace Logic
             return temp;
         }
 
-        public override double GetX(int i)
-        {
-            return dataLayer.GetX(i);
-        }
+       
 
         public override int GetCount { get => dataLayer.GetCount; }
 
-        public override double GetY(int i)
-        {
-            return dataLayer.GetY(i);
-        }
-
-        public override int GetSize(int i)
-        {
-            return dataLayer.GetSize(i);
-        }
         public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             IBall ball = (IBall)sender;
             mutex.WaitOne();
             WallCollision(ball);
             BallBounce(ball);
-            WallCollision(ball);
             mutex.ReleaseMutex();
         }
 

@@ -15,7 +15,7 @@
 
     <Grid>
         <Canvas Width="600" Height="480" VerticalAlignment="Top" HorizontalAlignment="Center" Background="#f1eded">
-            <ItemsControl Name="Balls" ItemsSource="{Binding Balls, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl Name="Balls" ItemsSource="{Binding Balls}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>

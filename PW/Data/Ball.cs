@@ -90,7 +90,7 @@ namespace Data
                 }
 
                 x = value;
-                RaisePropertyChanged(nameof(X));
+                RaisePropertyChanged();
             }
         }
         public double Y
@@ -104,7 +104,7 @@ namespace Data
                 }
 
                 y = value;
-                RaisePropertyChanged(nameof(Y));
+                RaisePropertyChanged();
             }
         }
 
@@ -138,7 +138,7 @@ namespace Data
                 if (!stop)
                 {
                     Move();
-                    RaisePropertyChanged();
+                 
                 }
                 stopwatch.Stop();
 
@@ -149,8 +149,6 @@ namespace Data
         {
             stop = true;
         }
-
-
 
     }
 }
