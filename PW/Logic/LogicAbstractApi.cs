@@ -31,14 +31,13 @@ namespace Logic
     {
         private readonly DataAbstractApi dataLayer;
         private readonly Mutex mutex = new Mutex();
-        private int width;
-        private int height;
+
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
-            this.width = width;
-            this.height = height;
+            Width = width;
+            Height = height;
 
         }
 
@@ -69,9 +68,9 @@ namespace Logic
 
             double diameter = ball.Size;
 
-            double right = this.width - diameter;
+            double right = Width - diameter;
 
-            double down = this.height - diameter;
+            double down = Height - diameter;
 
 
             if (ball.X <= 0)
