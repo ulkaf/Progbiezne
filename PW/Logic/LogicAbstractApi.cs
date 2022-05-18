@@ -158,10 +158,11 @@ namespace Logic
 
         public override IList CreateBalls(int count)
         {
+            int previousCount = dataLayer.GetCount;
             IList temp = dataLayer.CreateBallsList(count);
-            for (int i = 0; i < dataLayer.GetCount; i++)
+            for (int i = 0; i < dataLayer.GetCount-previousCount; i++)
             {
-                dataLayer.GetBall(i).PropertyChanged += BallPositionChanged;
+                dataLayer.GetBall(previousCount+i).PropertyChanged += BallPositionChanged;
             }
             return temp;
         }
