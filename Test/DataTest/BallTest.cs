@@ -15,7 +15,7 @@ namespace TestData
         {
             DApi = DataAbstractApi.CreateApi(800, 600);
             DApi.CreateBallsList(1);
-            Assert.AreEqual(0, DApi.GetBall(0).ID);
+            Assert.AreEqual(1, DApi.GetBall(0).ID);
 
             Assert.IsTrue(DApi.GetBall(0).X >= DApi.GetBall(0).Size);
             Assert.IsTrue(DApi.GetBall(0).X <= (DApi.Width - DApi.GetBall(0).Size));

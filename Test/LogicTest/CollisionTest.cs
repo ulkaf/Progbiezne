@@ -24,12 +24,16 @@ namespace TestLogic
             LApi.GetBall(1).X = 30;
             LApi.GetBall(0).Y = 20;
             LApi.GetBall(1).Y = 30;
+            LApi.GetBall(0).Move();
+            LApi.GetBall(1).Move();
+
             Assert.AreNotEqual(-3, LApi.GetBall(1).NewX);
             Assert.AreNotEqual(-3, LApi.GetBall(1).NewY);
-            LApi.GetBall(0).X = 40;
-            LApi.GetBall(0).Y = 40;
             Assert.AreNotEqual(5, LApi.GetBall(0).NewX);
             Assert.AreNotEqual(5, LApi.GetBall(0).NewY);
+
+     
+        
         }
 
 

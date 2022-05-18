@@ -59,7 +59,7 @@ namespace Data
                     double y = random.Next(radius, Height - radius);
                     double newX = random.Next(-10, 10);
                     double newY = random.Next(-10, 10);
-                    Ball ball = new Ball(i + ballsCount, radius, x, y, newX, newY, weight);
+                    Ball ball = new Ball(i+1 + ballsCount, radius, x, y, newX, newY, weight);
 
                     balls.Add(ball);
                     mutex.ReleaseMutex();
