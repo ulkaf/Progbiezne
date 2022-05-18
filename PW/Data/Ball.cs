@@ -4,8 +4,28 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Data
+
 {
-    internal class Ball : INotifyPropertyChanged
+    public interface IBall : INotifyPropertyChanged
+    {
+        int ID { get; }
+        int Size { get; }
+        double Weight { get; }
+
+        double X { get; set; }
+        double Y { get; set; }
+        double NewX { get; set; }
+        double NewY { get; set; }
+
+        void Move();
+        void CreateMovementTask(int interval);
+
+        void Stop();
+
+
+    }
+
+    internal class Ball : IBall
     {
         private readonly int size;
         private readonly int id;
@@ -20,7 +40,7 @@ namespace Data
 
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
-            this.id = identyfikator;
+            id = identyfikator;
             this.size = size;
             this.x = x;
             this.y = y;
@@ -88,13 +108,13 @@ namespace Data
             }
         }
 
-        public void Move(double dir)
+        public void Move()
         {
-            X = x + NewX*dir;
-            Y = y + NewY*dir;
+            X = x + NewX;
+            Y = y + NewY;
         }
-    
-    
+
+
         public double Weight { get => weight; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -105,7 +125,7 @@ namespace Data
         }
         public void CreateMovementTask(int interval)
         {
-            this.stop = false;
+            stop = false;
             task = Run(interval);
         }
 
@@ -117,7 +137,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move(1);
+                    Move();
                     RaisePropertyChanged();
                 }
                 stopwatch.Stop();
@@ -127,7 +147,7 @@ namespace Data
         }
         public void Stop()
         {
-            this.stop = true;
+            stop = true;
         }
 
 

@@ -24,7 +24,7 @@ namespace Model
         public override int width { get; }
         public override int height { get; }
         private readonly LogicAbstractApi LogicLayer;
-       
+
         public ModelApi(int Width, int Height)
         {
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Data
@@ -22,8 +20,9 @@ namespace Data
         public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
         public abstract int Height { get; }
-        public abstract void stopMovement();
-        public abstract void StartBallMovement();
+
+
+        public abstract IBall GetBall(int index);
 
         public static DataAbstractApi CreateApi(int width, int height)
         {
@@ -33,7 +32,7 @@ namespace Data
 
     internal class DataApi : DataAbstractApi
     {
-        private ObservableCollection<Ball> balls { get; }
+        private ObservableCollection<IBall> balls { get; }
         private readonly Mutex mutex = new Mutex();
 
         private readonly Random random = new Random();
@@ -45,13 +44,13 @@ namespace Data
 
         public DataApi(int width, int height)
         {
-            balls = new ObservableCollection<Ball>();
+            balls = new ObservableCollection<IBall>();
             Width = width;
             Height = height;
 
         }
 
-        public ObservableCollection<Ball> Balls => balls;
+        public ObservableCollection<IBall> Balls => balls;
 
         public override IList CreateBallsList(int count)
         {
@@ -60,15 +59,16 @@ namespace Data
             {
                 int ballsCount = balls.Count;
                 for (int i = 0; i < count; i++)
-                {   mutex.WaitOne(); 
+                {
+                    mutex.WaitOne();
                     int radius = random.Next(20, 40);
                     double weight = random.Next(30, 60);
                     double x = random.Next(radius, Width - radius);
                     double y = random.Next(radius, Height - radius);
                     double newX = random.Next(-10, 10);
                     double newY = random.Next(-10, 10);
-                    Ball ball = new Ball(i+ballsCount,radius, x, y, newX, newY, weight);
-                    ball.PropertyChanged += BallPositionChanged;
+                    Ball ball = new Ball(i + ballsCount, radius, x, y, newX, newY, weight);
+
                     balls.Add(ball);
                     mutex.ReleaseMutex();
 
@@ -78,14 +78,14 @@ namespace Data
             {
                 for (int i = count; i < 0; i++)
                 {
-                    
+
                     if (balls.Count > 0)
                     {
                         mutex.WaitOne();
                         balls.Remove(balls[balls.Count - 1]);
                         mutex.ReleaseMutex();
                     };
-                    
+
                 }
             }
             return balls;
@@ -130,137 +130,11 @@ namespace Data
             return balls[i].ID;
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        public override IBall GetBall(int index)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return balls[index];
         }
 
-
-        public override void StartBallMovement()
-        {
-            for (int i = 0; i < balls.Count; i++)
-            {
-                balls[i].CreateMovementTask(30);
-
-            }
-        }
-
-        public override void stopMovement()
-        {
-            for (int i = 0; i < balls.Count; i++)
-            {
-                balls[i].Stop();
-            }
-        }
-
-
-        public void WallCollision(Ball ball)
-        {
-
-            double diameter = ball.Size;
-
-            double right = 600 - diameter;
-
-            double down = 480 - diameter;
-
-
-            if (ball.X  <= 0)
-            {
-                ball.X = -ball.X;
-                ball.NewX = -ball.NewX;
-            }
-
-            else if (ball.X >= right)
-            {
-                ball.X = right-(ball.X-right);
-                ball.NewX = -ball.NewX;
-            }
-            if (ball.Y <= 0)
-            {
-                ball.Y = -ball.Y;
-                ball.NewY = -ball.NewY;
-            }
-
-            else if (ball.Y >= down)
-            {
-                ball.Y = down-(ball.Y-down);
-                ball.NewY = -ball.NewY;
-            }
-        }
-
-        public void BallBounce(Ball ball)
-        {
-            for (int i = 0; i < balls.Count; i++)
-            {
-                Ball secondBall = balls[i];
-                if (ball.ID == secondBall.ID) continue;
-                if (Collision(ball, secondBall))
-                {
-                   
-                    double m1 = ball.Weight;
-                    double m2 = secondBall.Weight;
-                    double v1x = ball.NewX;
-                    double v1y = ball.NewY;
-                    double v2x = secondBall.NewX;
-                    double v2y = secondBall.NewY;
-
-             
-
-                    double u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
-                    double u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
-
-                    double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
-                    double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
-
-                    ball.NewX = u1x;
-                    ball.NewY = u1y;
-                    secondBall.NewX = u2x;
-                    secondBall.NewY = u2y;
-                    return;
-
-                }
-
-
-
-            }
-
-        }
-
-
-
-
-        public bool Collision(Ball a, Ball b)
-        {
-            if (a == null || b == null)
-                return false;
-
-            return Distance(a, b) <= (a.Size / 2 + b.Size / 2);
-        }
-
-        private double Distance(Ball a, Ball b)
-        {
-            double x1 = a.X + a.Size / 2 + a.NewX;
-            double y1 = a.Y + a.Size / 2 + a.NewY;
-            double x2 = b.X + b.Size / 2 + b.NewY;
-            double y2 = b.Y + b.Size / 2 + b.NewY;
-
-            return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
-        }
-
-  
-
-        public void BallPositionChanged(object sender, PropertyChangedEventArgs args)
-        {
-            Ball ball = (Ball)sender;
-            mutex.WaitOne();
-            WallCollision(ball);
-            BallBounce(ball);
-            WallCollision(ball);
-            mutex.ReleaseMutex();
-        }
 
     }
 }
