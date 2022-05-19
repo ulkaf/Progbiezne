@@ -57,8 +57,8 @@ namespace Data
                     double weight = radius;
                     double x = random.Next(radius, Width - radius);
                     double y = random.Next(radius, Height - radius);
-                    double newX = random.Next(-10, 10);
-                    double newY = random.Next(-10, 10);
+                    double newX = random.Next(-10, 10) + random.NextDouble();
+                    double newY = random.Next(-10, 10) + random.NextDouble();
                     Ball ball = new Ball(i+1 + ballsCount, radius, x, y, newX, newY, weight);
 
                     balls.Add(ball);
