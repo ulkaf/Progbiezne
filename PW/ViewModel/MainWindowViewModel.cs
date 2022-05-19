@@ -9,6 +9,8 @@ namespace ViewModel
     {
         private readonly ModelAbstractApi ModelLayer;
         private int _BallVal = 1;
+        private int width;
+        private int height;
         private bool _isStopEnabled = false;
         private bool isStartEnabled = false;
         private bool _isAddEnabled = true;
@@ -20,8 +22,9 @@ namespace ViewModel
         { get; set; }
         public MainWindowViewModel()
         {
-
-            ModelLayer = ModelAbstractApi.CreateApi(600, 480);
+            width = 600;
+            height = 480;
+            ModelLayer = ModelAbstractApi.CreateApi(width, height);
             StopCommand = new RelayCommand(Stop);
             AddCommand = new RelayCommand(AddBalls);
             RunCommand = new RelayCommand(Start);
@@ -79,7 +82,36 @@ namespace ViewModel
             }
 
         }
+        public int Width
+        {
+            get
+            {
 
+                return width;
+            }
+            set
+            {
+
+                width = value;
+                RaisePropertyChanged();
+            }
+
+        }
+        public int Height
+        {
+            get
+            {
+
+                return height;
+            }
+            set
+            {
+
+                height = value;
+                RaisePropertyChanged();
+            }
+
+        }
         private void AddBalls()
         {
             size += BallVal;

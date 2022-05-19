@@ -14,7 +14,7 @@
 
 
     <Grid>
-        <Canvas Width="600" Height="480" VerticalAlignment="Top" HorizontalAlignment="Center" Background="#f1eded">
+        <Canvas Width="{Binding Width}" Height="{Binding Height}" VerticalAlignment="Top" HorizontalAlignment="Center" Background="#f1eded">
             <ItemsControl Name="Balls" ItemsSource="{Binding Balls}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -24,7 +24,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
              </ItemsControl>
-                    <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5" Height="480" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Border BorderBrush="#FF119A33" BorderThickness="5,5,5,5" Height="{Binding Height}" Width="{Binding Width}" HorizontalAlignment="Center" VerticalAlignment="Top">
         </Border>
         </Canvas>
         <TextBox HorizontalAlignment="Center" Margin="0,524,0,0" TextWrapping="Wrap" Text="{Binding BallVal}"  VerticalAlignment="Top" Width="200" Height="35" TextAlignment="Center" FontSize="24px" BorderBrush="#FF119A33" BorderThickness="3,3,3,3" />
