@@ -54,7 +54,7 @@ namespace Data
                 {
                     mutex.WaitOne();
                     int radius = random.Next(20, 40);
-                    double weight = random.Next(30, 60);
+                    double weight = radius;
                     double x = random.Next(radius, Width - radius);
                     double y = random.Next(radius, Height - radius);
                     double newX = random.Next(-10, 10);

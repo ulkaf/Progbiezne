@@ -23,7 +23,7 @@ namespace TestData
             Assert.IsTrue(DApi.GetBall(0).Y <= (DApi.Height - DApi.GetBall(0).Size));
 
             Assert.IsTrue(DApi.GetBall(0).Size >= 20 && DApi.GetBall(0).Size <= 40);
-            Assert.IsTrue(DApi.GetBall(0).Weight >= 30 && DApi.GetBall(0).Weight <= 60);
+            Assert.IsTrue(DApi.GetBall(0).Weight == DApi.GetBall(0).Size);
             Assert.IsTrue(DApi.GetBall(0).NewX >= -10 && DApi.GetBall(0).NewX <= 10);
             Assert.IsTrue(DApi.GetBall(0).NewY >= -10 && DApi.GetBall(0).NewY <= 10);
         }
