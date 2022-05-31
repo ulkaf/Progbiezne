@@ -19,7 +19,7 @@ namespace Data
         private readonly Stopwatch stopwatch;
         private Task task;
         private bool stop;
- 
+     
 
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
@@ -93,10 +93,9 @@ namespace Data
 
         public void Move(double time)
         {
-            
-            X +=  NewX;
-            Y +=  NewY;
-   
+      
+            X +=  NewX*time;
+            Y +=  NewY*time;
         }
 
 
@@ -122,7 +121,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move((interval - stopwatch.ElapsedMilliseconds)/10);
+                    Move((interval - stopwatch.ElapsedMilliseconds)/16);
                 }
                 stopwatch.Stop();
 

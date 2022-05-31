@@ -87,6 +87,14 @@ namespace Logic
 
                 if (Collision(ball, secondBall))
                 {
+                    double relativeX = ball.X - secondBall.X;
+                    double relativeY = ball.Y - secondBall.Y; 
+                    double relativeNewX = ball.NewX - secondBall.NewX;
+                    double relativeNewY = ball.NewY - secondBall.NewY;
+                    if(relativeX*relativeNewX+relativeY*relativeNewY >0)
+                    {
+                        return;
+                    }
 
                     double m1 = ball.Weight;
                     double m2 = secondBall.Weight;
@@ -132,10 +140,10 @@ namespace Logic
 
         internal double Distance(IBall a, IBall b)
         {
-            double x1 = a.X + a.Size / 2 + a.NewX;
-            double y1 = a.Y + a.Size / 2 + a.NewY;
-            double x2 = b.X + b.Size / 2 + b.NewY;
-            double y2 = b.Y + b.Size / 2 + b.NewY;
+            double x1 = a.X + a.Size / 2 ;
+            double y1 = a.Y + a.Size / 2 ;
+            double x2 = b.X + b.Size / 2 ;
+            double y2 = b.Y + b.Size / 2 ;
 
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
