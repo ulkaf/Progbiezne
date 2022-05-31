@@ -65,7 +65,7 @@ namespace Data
         public double X
         {
             get => x;
-            set
+            private  set
             {
                 if (value.Equals(x))
                 {
@@ -79,7 +79,7 @@ namespace Data
         public double Y
         {
             get => y;
-            set
+            private set
             {
                 if (value.Equals(y))
                 {

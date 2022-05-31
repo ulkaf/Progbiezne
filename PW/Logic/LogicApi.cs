@@ -9,12 +9,14 @@ namespace Logic
     internal class LogicApi : LogicAbstractApi
     {
         private readonly DataAbstractApi dataLayer;
+     
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
             Width = width;
             Height = height;
+     
         }
 
         public override int Width { get; }
@@ -49,27 +51,27 @@ namespace Logic
             double down = Height - diameter;
 
 
-            if (ball.X <= 0)
+            if (ball.X <= 5)
             {
-                ball.X = -ball.X;
+               if(ball.NewX <= 0)
                 ball.NewX = -ball.NewX;
             }
 
-            else if (ball.X >= right)
+            else if (ball.X >= right -5)
             {
-                ball.X = right - (ball.X - right);
-                ball.NewX = -ball.NewX;
+                if (ball.NewX > 0)
+                    ball.NewX = -ball.NewX;
             }
-            if (ball.Y <= 0)
+            if (ball.Y <= 5)
             {
-                ball.Y = -ball.Y;
-                ball.NewY = -ball.NewY;
+                if (ball.NewY <= 0)
+                    ball.NewY = -ball.NewY;
             }
 
-            else if (ball.Y >= down)
+            else if (ball.Y >= down - 5)
             {
-                ball.Y = down - (ball.Y - down);
-                ball.NewY = -ball.NewY;
+                if (ball.NewY > 0)
+                    ball.NewY = -ball.NewY;
             }
         }
 
@@ -101,10 +103,12 @@ namespace Logic
                     double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
                     double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
 
-                    ball.NewX = u1x;
-                    ball.NewY = u1y;
-                    secondBall.NewX = u2x;
-                    secondBall.NewY = u2y;
+                 
+                        ball.NewX = u1x;
+                        ball.NewY = u1y;
+                        secondBall.NewX = u2x;
+                        secondBall.NewY = u2y;
+                 
                     return;
 
                 }

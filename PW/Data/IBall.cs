@@ -7,8 +7,8 @@ namespace Data
         int ID { get; }
         int Size { get; }
         double Weight { get; }
-        double X { get; set; }
-        double Y { get; set; }
+        double X { get; }
+        double Y { get;  }
         double NewX { get; set; }
         double NewY { get; set; }
         void Move(double time);
