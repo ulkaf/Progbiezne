@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Data
@@ -15,9 +16,10 @@ namespace Data
         private double newX;
         private double newY;
         private readonly double weight;
-        private readonly Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch stopwatch;
         private Task task;
-        private bool stop = false;
+        private bool stop;
+ 
 
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
@@ -28,6 +30,8 @@ namespace Data
             this.newX = newX;
             this.newY = newY;
             this.weight = weight;
+            stop = false;
+            stopwatch = new Stopwatch();
         }
 
         public int ID { get => id; }
@@ -43,7 +47,6 @@ namespace Data
                 }
 
                 newX = value;
-
             }
         }
         public double NewY
@@ -57,7 +60,6 @@ namespace Data
                 }
 
                 newY = value;
-
             }
         }
         public double X
@@ -89,10 +91,12 @@ namespace Data
             }
         }
 
-        public void Move()
+        public void Move(double time)
         {
+            
             X +=  NewX;
             Y +=  NewY;
+   
         }
 
 
@@ -118,8 +122,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move();
-                 
+                    Move((interval - stopwatch.ElapsedMilliseconds)/10);
                 }
                 stopwatch.Stop();
 

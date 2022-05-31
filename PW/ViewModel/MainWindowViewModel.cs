@@ -115,19 +115,24 @@ namespace ViewModel
         private void AddBalls()
         {
             size += BallVal;
-            if (size > 0)
+            if (size > 0 && size <= 50)
             {
                 isRunEnabled = true;
             }
-            else
+            if(size < 0)
             {
                 size = 0;
                 isRunEnabled = false;
             }
-            Balls = ModelLayer.Start(BallVal);
+            if(size <= 50)
+            {
+                Balls = ModelLayer.Start(BallVal);
+            }
+            else
+            {
+               size -= BallVal;
+            }
             BallVal = 1;
-
-
         }
         private void Stop()
         {

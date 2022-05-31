@@ -9,15 +9,12 @@ namespace Logic
     internal class LogicApi : LogicAbstractApi
     {
         private readonly DataAbstractApi dataLayer;
-        private readonly Mutex mutex = new Mutex();
-
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
             Width = width;
             Height = height;
-
         }
 
         public override int Width { get; }
@@ -161,10 +158,8 @@ namespace Logic
         public override void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             IBall ball = (IBall)sender;
-            mutex.WaitOne();
             WallCollision(ball);
             BallBounce(ball);
-            mutex.ReleaseMutex();
         }
 
 

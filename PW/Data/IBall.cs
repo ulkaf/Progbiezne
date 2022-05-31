@@ -11,7 +11,7 @@ namespace Data
         double Y { get; set; }
         double NewX { get; set; }
         double NewY { get; set; }
-        void Move();
+        void Move(double time);
         void CreateMovementTask(int interval);
         void Stop();
     }

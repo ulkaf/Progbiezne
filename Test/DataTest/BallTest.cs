@@ -36,7 +36,7 @@ namespace TestData
             double y = DApi.GetBall(0).Y;
             DApi.GetBall(0).NewX = 5;
             DApi.GetBall(0).NewY = 5;
-            DApi.GetBall(0).Move();
+            DApi.GetBall(0).Move(1);
             Assert.AreNotEqual(x, DApi.GetBall(0).X);
             Assert.AreNotEqual(y, DApi.GetBall(0).Y);
         }

@@ -9,8 +9,6 @@ namespace Data
         public abstract IList CreateBallsList(int count);
         public abstract int Width { get; }
         public abstract int Height { get; }
-
-
         public abstract IBall GetBall(int index);
 
         public static DataAbstractApi CreateApi(int width, int height)
