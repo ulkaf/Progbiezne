@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -11,9 +15,16 @@ namespace Data
 
 
         private readonly Random random = new Random();
+        private readonly object locker = new object();
+        private readonly Stopwatch stopwatch;
+        private string logPath = "ball_log.json";
+        private bool newSession;
+        private bool stop;
 
         public override int Width { get; }
         public override int Height { get; }
+
+      
 
 
 
@@ -22,7 +33,8 @@ namespace Data
             balls = new ObservableCollection<IBall>();
             Width = width;
             Height = height;
-
+            newSession = true;
+            stopwatch = new Stopwatch();
         }
 
         public ObservableCollection<IBall> Balls => balls;
@@ -108,6 +120,78 @@ namespace Data
             return balls[index];
         }
 
+        public override IList GetBalls()
+        {
+            return Balls;
+        }
+
+
+        public override void StopLoggingTask()
+        {
+            stop = true;
+        }
+
+        public override Task CreateLoggingTask(int interval, IList Balls)
+        {
+            stop = false;
+            return CallLogger(interval, Balls);
+        }
+
+        internal async Task CallLogger(int interval, IList Balls)
+        {   while (!stop)
+            {
+                stopwatch.Reset();
+                stopwatch.Start();
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string jsonBalls = JsonSerializer.Serialize(balls, options);
+                string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+
+                string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
+                lock (locker)
+                {
+                    AppendObjectToJSONFile(logPath, newJsonObject);
+                }
+                stopwatch.Stop();
+                await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
+            }
+        }
+        internal void AppendObjectToJSONFile(string filename, string newJsonObject)
+        {
+          
+            if (File.Exists(filename) && newSession)
+            {
+                newSession = false;
+                File.Delete(filename);
+            }
+
+            using (StreamWriter sw = new StreamWriter(filename, true))
+            {
+                sw.WriteLine("[]");
+            }
+
+            string content;
+            using (StreamReader sr = File.OpenText(filename))
+            {
+                content = sr.ReadToEnd();
+            }
+
+            content = content.TrimEnd();
+            content = content.Remove(content.Length - 1, 1);
+         
+            if (content.Length == 1)
+            {
+                content = String.Format("{0}\n{1}\n]\n", content.Trim(), newJsonObject);
+            }
+            else
+            {
+                content = String.Format("{0},\n{1}\n]\n", content.Trim(), newJsonObject);
+            }
+
+            using (StreamWriter sw = File.CreateText(filename))
+            {
+                sw.Write(content);
+            }
+        }
 
     }
 }

@@ -23,12 +23,13 @@ namespace Logic
         public override int Height { get; }
 
         public override void Start()
-        {
+        {   
             for (int i = 0; i < dataLayer.GetCount; i++)
             {
                 dataLayer.GetBall(i).CreateMovementTask(30);
 
             }
+            dataLayer.CreateLoggingTask(1000, dataLayer.GetBalls());
         }
 
         public override void Stop()
@@ -38,6 +39,7 @@ namespace Logic
                 dataLayer.GetBall(i).Stop();
 
             }
+            dataLayer.StopLoggingTask();
         }
         public override IList CreateBalls(int count)
         {

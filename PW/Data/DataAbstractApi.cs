@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -11,6 +12,11 @@ namespace Data
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract IBall GetBall(int index);
+        public abstract IList GetBalls();
+
+        public abstract void StopLoggingTask();
+
+        public abstract Task CreateLoggingTask(int interval, IList Balls);
 
         public static DataAbstractApi CreateApi(int width, int height)
         {
