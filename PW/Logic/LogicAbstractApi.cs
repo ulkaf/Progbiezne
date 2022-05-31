@@ -14,8 +14,8 @@ namespace Logic
         public abstract IList CreateBalls(int count);
         public abstract void Start();
         public abstract void Stop();
-        public abstract  int Width { get; set; }
-        public abstract  int Height { get; set; }
+        public abstract  int Width { get;}
+        public abstract  int Height { get; }
         public abstract IBall GetBall(int index);
         public abstract void WallCollision(IBall ball);
         public abstract void BallBounce(IBall ball);
@@ -43,8 +43,8 @@ namespace Logic
 
         }
 
-        public override int Width { get ; set ; }
-        public override int Height { get; set; }
+        public override int Width { get;}
+        public override int Height { get;}
 
         public override void Start()
         {

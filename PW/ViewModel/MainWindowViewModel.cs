@@ -16,10 +16,10 @@ namespace ViewModel
         private bool _isAddEnabled = true;
         private int size = 0;
         private IList _balls;
-        public ICommand AddCommand { get; set; }
-        public ICommand RunCommand { get; set; }
+        public ICommand AddCommand { get;}
+        public ICommand RunCommand { get;}
         public ICommand StopCommand
-        { get; set; }
+        { get; }
         public MainWindowViewModel()
         {
             width = 600;
