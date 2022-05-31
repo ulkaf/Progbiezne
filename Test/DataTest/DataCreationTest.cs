@@ -23,9 +23,9 @@ namespace TestData
             Assert.AreEqual(600, DApi.Height);
             DApi.CreateBallsList(5);
             Assert.AreEqual(5, DApi.GetCount);
-            DApi.CreateBallsList(-3);
+            DApi.DeleteBalls(3);
             Assert.AreEqual(2, DApi.GetCount);
-            DApi.CreateBallsList(-3);
+            DApi.DeleteBalls(3);
             Assert.AreEqual(0, DApi.GetCount);
         }
 

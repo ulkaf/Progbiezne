@@ -24,15 +24,20 @@ namespace TestLogic
             Assert.AreEqual(600, LApi.Height);
             LApi.CreateBalls(5);
             Assert.AreEqual(5, LApi.GetCount);
-            LApi.CreateBalls(-3);
+            LApi.DeleteBalls(3);
             Assert.AreEqual(2, LApi.GetCount);
-            LApi.CreateBalls(-3);
+            LApi.DeleteBalls(3);
             Assert.AreEqual(0, LApi.GetCount);
         }
 
-      
-
-
-
+        [TestMethod]
+        public void getBall()
+        {
+            LApi = LogicAbstractApi.CreateApi(800, 600);
+            LApi.CreateBalls(3);
+            Assert.AreNotEqual(LApi.GetBall(0), LApi.GetBall(1));
+            Assert.AreNotEqual(LApi.GetBall(1), LApi.GetBall(2));
+            Assert.AreNotEqual(LApi.GetBall(0), LApi.GetBall(2));
+        }
     }
 }

@@ -17,7 +17,6 @@ namespace Data
         private double newY;
         private readonly double weight;
         private readonly Stopwatch stopwatch;
-        private Task task;
         private bool stop;
      
 
@@ -107,10 +106,10 @@ namespace Data
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public void CreateMovementTask(int interval)
+        public Task CreateMovementTask(int interval)
         {
             stop = false;
-            task = Run(interval);
+            return Run(interval);
         }
 
         private async Task Run(int interval)

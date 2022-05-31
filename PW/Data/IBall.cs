@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -12,7 +13,7 @@ namespace Data
         double NewX { get; set; }
         double NewY { get; set; }
         void Move(double time);
-        void CreateMovementTask(int interval);
+        Task CreateMovementTask(int interval);
         void Stop();
     }
 }
