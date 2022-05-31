@@ -9,7 +9,9 @@ namespace Model
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract void StartMoving();
-        public abstract IList Start(int ballVal);
+        public abstract IList Create(int ballVal);
+
+        public abstract IList Delete(int ballVal);
         public abstract void Stop();
 
 

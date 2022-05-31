@@ -31,7 +31,8 @@ namespace Model
             LogicLayer.Stop();
         }
 
-        public override IList Start(int ballVal) => LogicLayer.CreateBalls(ballVal);
+        public override IList Create(int ballVal) => LogicLayer.CreateBalls(ballVal);
+        public override IList Delete(int ballVal) => LogicLayer.DeleteBalls(ballVal);
 
     }
 }

@@ -39,9 +39,31 @@ namespace Logic
 
             }
         }
+        public override IList CreateBalls(int count)
+        {
+            int previousCount = dataLayer.GetCount;
+            IList temp = dataLayer.CreateBallsList(count);
+            for (int i = 0; i < dataLayer.GetCount - previousCount; i++)
+            {
+                dataLayer.GetBall(previousCount + i).PropertyChanged += BallPositionChanged;
+            }
+            return temp;
+        }
+
+        public override IList DeleteBalls(int count)
+        {
+            return dataLayer.DeleteBalls(count);
+        }
+        public override IBall GetBall(int index)
+        {
+            return dataLayer.GetBall(index);
+        }
 
 
-        public override void WallCollision(IBall ball)
+        public override int GetCount { get => dataLayer.GetCount; }
+
+
+        internal void WallCollision(IBall ball)
         {
 
             double diameter = ball.Size;
@@ -75,7 +97,7 @@ namespace Logic
             }
         }
 
-        public override void BallBounce(IBall ball)
+        internal void BallBounce(IBall ball)
         {
             for (int i = 0; i < dataLayer.GetCount; i++)
             {
@@ -149,25 +171,9 @@ namespace Logic
         }
 
 
-        public override IList CreateBalls(int count)
-        {
-            int previousCount = dataLayer.GetCount;
-            IList temp = dataLayer.CreateBallsList(count);
-            for (int i = 0; i < dataLayer.GetCount - previousCount; i++)
-            {
-                dataLayer.GetBall(previousCount + i).PropertyChanged += BallPositionChanged;
-            }
-            return temp;
-        }
-        public override IBall GetBall(int index)
-        {
-            return dataLayer.GetBall(index);
-        }
 
 
-        public override int GetCount { get => dataLayer.GetCount; }
-
-        public override void BallPositionChanged(object sender, PropertyChangedEventArgs args)
+        internal void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             IBall ball = (IBall)sender;
             WallCollision(ball);

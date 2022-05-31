@@ -7,6 +7,7 @@ namespace Data
 
         public abstract int GetCount { get; }
         public abstract IList CreateBallsList(int count);
+        public abstract IList DeleteBalls(int count);
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract IBall GetBall(int index);

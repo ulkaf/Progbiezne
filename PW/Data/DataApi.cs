@@ -8,7 +8,7 @@ namespace Data
     internal class DataApi : DataAbstractApi
     {
         private ObservableCollection<IBall> balls { get; }
-        
+
 
         private readonly Random random = new Random();
 
@@ -41,16 +41,7 @@ namespace Data
                     bool licz;
                     double x = random.Next(radius, Width - radius);
                     double y = random.Next(radius, Height - radius);
-                   /* while(contin)
-                    {
-                        for(int j = 0; j < GetCount; j++)
-                        {
-                            if(x >= balls[j].X && x <= balls[j].X + balls[j].Size)
-                            {
 
-                            }
-                        }
-                    }*/
 
 
 
@@ -59,22 +50,22 @@ namespace Data
                         licz = false;
                         for (int j = 0; j < GetCount; j++)
                         {
-                                if (x <= balls[j].X + balls[j].Size && x + radius >= balls[j].X)
+                            if (x <= balls[j].X + balls[j].Size && x + radius >= balls[j].X)
+                            {
+                                if (y <= balls[j].Y + balls[j].Size && y + radius >= balls[j].Y)
                                 {
-                                    if (y <= balls[j].Y + balls[j].Size && y + radius >= balls[j].Y)
-                                    {
-                                        x = random.Next(radius, Width - radius);
-                                        licz = true;
-                                        break;
-                                    }
+                                    x = random.Next(radius, Width - radius);
+                                    licz = true;
+                                    break;
                                 }
+                            }
                         }
                         if (!licz)
                             contin = false;
                     }
                     double newX = 0;
                     double newY = 0;
-                    while(newX == 0)
+                    while (newX == 0)
                     {
                         newX = random.Next(-5, 5) + random.NextDouble();
                     }
@@ -88,21 +79,26 @@ namespace Data
 
                 }
             }
-            if (count < 0)
-            {
-                for (int i = count; i < 0; i++)
-                {
 
-                    if (balls.Count > 0)
-                    {
-                        balls.Remove(balls[balls.Count - 1]);
-                    };
 
-                }
-            }
             return balls;
         }
 
+        public override IList DeleteBalls(int count)
+        {
+            for (int i = 0; i<count; i++)
+            {
+
+                if (balls.Count > 0)
+                {
+                    balls.Remove(balls[balls.Count - 1]);
+                };
+
+            }
+            return Balls;
+    
+    
+    }
         public override int GetCount { get => balls.Count; }
 
 
