@@ -1,6 +1,6 @@
 ﻿namespace Data
 {
-    public class BallCollisionInfo
+    internal class BallCollisionInfo:ICollisionInfo
     {
         public BallCollisionInfo(IBall ball, double oldNewX1, double oldNewY1, IBall secondBall, double oldNewX2, double oldNewY2)
         {
@@ -16,10 +16,13 @@
 
 
         public IBall Ball { get; }
-        public IBall SecondBall { get; }
 
         public double OldNewX1 { get; }
         public double OldNewY1 { get; }
+
+        public IBall SecondBall { get; }
+
+
 
         public double OldNewX2 { get; }
 

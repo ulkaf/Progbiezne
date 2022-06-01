@@ -178,7 +178,7 @@ namespace Data
         }
 
 
-        public override BallCollisionInfo GetBallColisionInfo(IBall ball, double v1x, double v1y, IBall secondBall, double v2x, double v2y)
+        public override ICollisionInfo GetBallColisionInfo(IBall ball, double v1x, double v1y, IBall secondBall, double v2x, double v2y)
         {
             return new BallCollisionInfo(ball, v1x, v1y, secondBall, v2x, v2y);
         }
