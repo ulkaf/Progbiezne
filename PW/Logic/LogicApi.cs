@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Text.Json;
 using System.Threading;
 
 namespace Logic
@@ -9,7 +10,8 @@ namespace Logic
     internal class LogicApi : LogicAbstractApi
     {
         private readonly DataAbstractApi dataLayer;
-     
+        private string logPath = "ball_log.json";
+        private readonly object locker = new object();  
 
         public LogicApi(int width, int height)
         {
@@ -67,36 +69,64 @@ namespace Logic
 
         internal void WallCollision(IBall ball)
         {
-
+            bool collision = false;
             double diameter = ball.Size;
 
             double right = Width - diameter;
 
             double down = Height - diameter;
 
-
+            double oldNewX = ball.NewX;
+            double oldNewY = ball.NewY;
             if (ball.X <= 5)
             {
-               if(ball.NewX <= 0)
-                ball.NewX = -ball.NewX;
+                if (ball.NewX <= 0)
+                {
+                    ball.NewX = -ball.NewX;
+                    collision = true;
+                }
             }
 
             else if (ball.X >= right -5)
             {
                 if (ball.NewX > 0)
+                {
                     ball.NewX = -ball.NewX;
+                    collision = true;
+                }
             }
             if (ball.Y <= 5)
             {
                 if (ball.NewY <= 0)
+                {
                     ball.NewY = -ball.NewY;
+                    collision = true;
+                }
             }
 
             else if (ball.Y >= down - 5)
             {
                 if (ball.NewY > 0)
+                {
                     ball.NewY = -ball.NewY;
+                    collision = true;
+                }
             }
+
+
+          
+            if (collision == true)
+            {
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string jsonCollisionInfo = JsonSerializer.Serialize(dataLayer.GetWallColisionInfo(ball,oldNewX,oldNewY), options);
+                string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+                string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"WallCollision\":{1}\n", now, jsonCollisionInfo) + "}";
+
+                dataLayer.AppendObjectToJSONFile(logPath, newJsonObject);
+            }
+            
+
+
         }
 
         internal void BallBounce(IBall ball)
@@ -135,12 +165,22 @@ namespace Logic
                     double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
                     double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
 
-                 
+                    lock (locker)
+
+                    {
                         ball.NewX = u1x;
                         ball.NewY = u1y;
                         secondBall.NewX = u2x;
                         secondBall.NewY = u2y;
-                 
+
+                        var options = new JsonSerializerOptions { WriteIndented = true };
+                        string jsonCollisionInfo = JsonSerializer.Serialize(dataLayer.GetBallColisionInfo(ball,v1x,v1y,secondBall,v2x,v2y), options);
+                        string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+                        string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"BallCollision\":{1}\n", now, jsonCollisionInfo) + "}";
+
+                        dataLayer.AppendObjectToJSONFile(logPath, newJsonObject);
+
+                    }
                     return;
 
                 }

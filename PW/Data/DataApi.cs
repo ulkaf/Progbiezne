@@ -137,25 +137,8 @@ namespace Data
             return CallLogger(interval, Balls);
         }
 
-        internal async Task CallLogger(int interval, IList Balls)
-        {   while (!stop)
-            {
-                stopwatch.Reset();
-                stopwatch.Start();
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string jsonBalls = JsonSerializer.Serialize(balls, options);
-                string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
 
-                string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
-                lock (locker)
-                {
-                    AppendObjectToJSONFile(logPath, newJsonObject);
-                }
-                stopwatch.Stop();
-                await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
-            }
-        }
-        internal void AppendObjectToJSONFile(string filename, string newJsonObject)
+        public override void AppendObjectToJSONFile(string filename, string newJsonObject)
         {
           
             if (File.Exists(filename) && newSession)
@@ -193,5 +176,36 @@ namespace Data
             }
         }
 
+
+        public override BallColisionInfo GetBallColisionInfo(IBall ball,double v1x,double v1y, IBall secondBall,double v2x,double v2y)
+        {
+            return new BallColisionInfo(ball,v1x,v1y, secondBall, v2x,  v2y);
+        }
+
+        public override WallColisionInfo GetWallColisionInfo(IBall ball, double oldNewX, double oldNewY)
+        {
+            return new WallColisionInfo(ball,oldNewX,oldNewY);
+        }
+
+
+        internal async Task CallLogger(int interval, IList Balls)
+        {
+            while (!stop)
+            {
+                stopwatch.Reset();
+                stopwatch.Start();
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string jsonBalls = JsonSerializer.Serialize(balls, options);
+                string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+
+                string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
+                lock (locker)
+                {
+                    AppendObjectToJSONFile(logPath, newJsonObject);
+                }
+                stopwatch.Stop();
+                await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
+            }
+        }
     }
 }

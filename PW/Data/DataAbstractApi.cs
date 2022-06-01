@@ -18,6 +18,11 @@ namespace Data
 
         public abstract Task CreateLoggingTask(int interval, IList Balls);
 
+        public abstract void AppendObjectToJSONFile(string filename, string newJsonObject);
+
+        public abstract BallColisionInfo GetBallColisionInfo(IBall ball,double v1x,double v1y, IBall secondBall,double v2x,double v2y);
+        public abstract WallColisionInfo GetWallColisionInfo(IBall ball, double oldNewX, double oldNewY);
+
         public static DataAbstractApi CreateApi(int width, int height)
         {
             return new DataApi(width, height);
