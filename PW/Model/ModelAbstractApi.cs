@@ -20,6 +20,6 @@ namespace Model
             return new ModelApi(Weight, Height);
         }
     }
-    
+
 
 }

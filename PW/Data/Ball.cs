@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Data
@@ -18,7 +17,7 @@ namespace Data
         private readonly double weight;
         private readonly Stopwatch stopwatch;
         private bool stop;
-     
+
 
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
@@ -64,7 +63,7 @@ namespace Data
         public double X
         {
             get => x;
-            private  set
+            private set
             {
                 if (value.Equals(x))
                 {
@@ -92,9 +91,9 @@ namespace Data
 
         public void Move(double time)
         {
-      
-            X +=  NewX*time;
-            Y +=  NewY*time;
+
+            X += NewX * time;
+            Y += NewY * time;
         }
 
 
@@ -120,7 +119,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move((interval - stopwatch.ElapsedMilliseconds)/16);
+                    Move((interval - stopwatch.ElapsedMilliseconds) / 16);
                 }
                 stopwatch.Stop();
 

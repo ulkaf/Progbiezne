@@ -17,8 +17,8 @@ namespace ViewModel
         private bool _isDeleteEnabled = false;
         private int size = 0;
         private IList _balls;
-        public ICommand AddCommand { get;}
-        public ICommand RunCommand { get;}
+        public ICommand AddCommand { get; }
+        public ICommand RunCommand { get; }
         public ICommand StopCommand
         { get; }
         public ICommand DeleteCommand { get; }
@@ -145,14 +145,14 @@ namespace ViewModel
                 isDeleteEnabled = false;
             }
 
-            
-            if(size == 50)
+
+            if (size == 50)
             {
                 isAddEnabled = false;
             }
-            if(size > 50)
+            if (size > 50)
             {
-               size -= BallVal;
+                size -= BallVal;
             }
             BallVal = 1;
 
@@ -168,14 +168,14 @@ namespace ViewModel
                 isAddEnabled = true;
                 Balls = ModelLayer.Delete(BallVal);
             }
-            
+
             if (size <= 0)
             {
                 size = 0;
                 isRunEnabled = false;
                 isDeleteEnabled = false;
             }
-       
+
             BallVal = 1;
 
         }

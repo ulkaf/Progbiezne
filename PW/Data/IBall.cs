@@ -9,7 +9,7 @@ namespace Data
         int Size { get; }
         double Weight { get; }
         double X { get; }
-        double Y { get;  }
+        double Y { get; }
         double NewX { get; set; }
         double NewY { get; set; }
         void Move(double time);

@@ -3,29 +3,28 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Text.Json;
-using System.Threading;
 
 namespace Logic
 {
     internal class LogicApi : LogicAbstractApi
     {
         private readonly DataAbstractApi dataLayer;
-        private string logPath = "ball_log.json";
-        private readonly object locker = new object();  
+        private readonly string logPath = "ball_log.json";
+        private readonly object locker = new object();
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
             Width = width;
             Height = height;
-     
+
         }
 
         public override int Width { get; }
         public override int Height { get; }
 
         public override void Start()
-        {   
+        {
             for (int i = 0; i < dataLayer.GetCount; i++)
             {
                 dataLayer.GetBall(i).CreateMovementTask(30);
@@ -69,30 +68,29 @@ namespace Logic
 
         internal void WallCollision(IBall ball)
         {
-            bool collision = false;
+
             double diameter = ball.Size;
 
             double right = Width - diameter;
 
             double down = Height - diameter;
 
-            double oldNewX = ball.NewX;
-            double oldNewY = ball.NewY;
+
             if (ball.X <= 5)
             {
                 if (ball.NewX <= 0)
                 {
                     ball.NewX = -ball.NewX;
-                    collision = true;
+
                 }
             }
 
-            else if (ball.X >= right -5)
+            else if (ball.X >= right - 5)
             {
                 if (ball.NewX > 0)
                 {
                     ball.NewX = -ball.NewX;
-                    collision = true;
+
                 }
             }
             if (ball.Y <= 5)
@@ -100,7 +98,7 @@ namespace Logic
                 if (ball.NewY <= 0)
                 {
                     ball.NewY = -ball.NewY;
-                    collision = true;
+
                 }
             }
 
@@ -109,22 +107,11 @@ namespace Logic
                 if (ball.NewY > 0)
                 {
                     ball.NewY = -ball.NewY;
-                    collision = true;
+
                 }
             }
 
 
-          
-            if (collision == true)
-            {
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string jsonCollisionInfo = JsonSerializer.Serialize(dataLayer.GetWallColisionInfo(ball,oldNewX,oldNewY), options);
-                string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
-                string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"WallCollision\":{1}\n", now, jsonCollisionInfo) + "}";
-
-                dataLayer.AppendObjectToJSONFile(logPath, newJsonObject);
-            }
-            
 
 
         }
@@ -142,10 +129,10 @@ namespace Logic
                 if (Collision(ball, secondBall))
                 {
                     double relativeX = ball.X - secondBall.X;
-                    double relativeY = ball.Y - secondBall.Y; 
+                    double relativeY = ball.Y - secondBall.Y;
                     double relativeNewX = ball.NewX - secondBall.NewX;
                     double relativeNewY = ball.NewY - secondBall.NewY;
-                    if(relativeX*relativeNewX+relativeY*relativeNewY >0)
+                    if (relativeX * relativeNewX + relativeY * relativeNewY > 0)
                     {
                         return;
                     }
@@ -174,7 +161,7 @@ namespace Logic
                         secondBall.NewY = u2y;
 
                         var options = new JsonSerializerOptions { WriteIndented = true };
-                        string jsonCollisionInfo = JsonSerializer.Serialize(dataLayer.GetBallColisionInfo(ball,v1x,v1y,secondBall,v2x,v2y), options);
+                        string jsonCollisionInfo = JsonSerializer.Serialize(dataLayer.GetBallColisionInfo(ball, v1x, v1y, secondBall, v2x, v2y), options);
                         string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
                         string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"BallCollision\":{1}\n", now, jsonCollisionInfo) + "}";
 
@@ -204,10 +191,10 @@ namespace Logic
 
         internal double Distance(IBall a, IBall b)
         {
-            double x1 = a.X + a.Size / 2 ;
-            double y1 = a.Y + a.Size / 2 ;
-            double x2 = b.X + b.Size / 2 ;
-            double y2 = b.Y + b.Size / 2 ;
+            double x1 = a.X + a.Size / 2;
+            double y1 = a.Y + a.Size / 2;
+            double x2 = b.X + b.Size / 2;
+            double y2 = b.Y + b.Size / 2;
 
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }

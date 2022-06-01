@@ -20,8 +20,8 @@ namespace Data
 
         public abstract void AppendObjectToJSONFile(string filename, string newJsonObject);
 
-        public abstract BallColisionInfo GetBallColisionInfo(IBall ball,double v1x,double v1y, IBall secondBall,double v2x,double v2y);
-        public abstract WallColisionInfo GetWallColisionInfo(IBall ball, double oldNewX, double oldNewY);
+        public abstract BallCollisionInfo GetBallColisionInfo(IBall ball, double v1x, double v1y, IBall secondBall, double v2x, double v2y);
+
 
         public static DataAbstractApi CreateApi(int width, int height)
         {
@@ -29,5 +29,5 @@ namespace Data
         }
     }
 
-   
+
 }

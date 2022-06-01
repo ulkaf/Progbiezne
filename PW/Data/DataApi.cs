@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Data
@@ -17,14 +16,14 @@ namespace Data
         private readonly Random random = new Random();
         private readonly object locker = new object();
         private readonly Stopwatch stopwatch;
-        private string logPath = "ball_log.json";
+        private readonly string logPath = "ball_log.json";
         private bool newSession;
         private bool stop;
 
         public override int Width { get; }
         public override int Height { get; }
 
-      
+
 
 
 
@@ -51,8 +50,8 @@ namespace Data
                     double weight = radius;
                     bool contin = true;
                     bool licz;
-                    double x = random.Next(radius, Width - radius);
-                    double y = random.Next(radius, Height - radius);
+                    double x = random.Next(radius + 20, Width - radius - 20);
+                    double y = random.Next(radius + 20, Height - radius - 20);
 
 
 
@@ -66,14 +65,16 @@ namespace Data
                             {
                                 if (y <= balls[j].Y + balls[j].Size && y + radius >= balls[j].Y)
                                 {
-                                    x = random.Next(radius, Width - radius);
+                                    x = random.Next(radius + 20, Width - radius - 20);
                                     licz = true;
                                     break;
                                 }
                             }
                         }
                         if (!licz)
+                        {
                             contin = false;
+                        }
                     }
                     double newX = 0;
                     double newY = 0;
@@ -98,7 +99,7 @@ namespace Data
 
         public override IList DeleteBalls(int count)
         {
-            for (int i = 0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
 
                 if (balls.Count > 0)
@@ -108,9 +109,9 @@ namespace Data
 
             }
             return Balls;
-    
-    
-    }
+
+
+        }
         public override int GetCount { get => balls.Count; }
 
 
@@ -140,7 +141,7 @@ namespace Data
 
         public override void AppendObjectToJSONFile(string filename, string newJsonObject)
         {
-          
+
             if (File.Exists(filename) && newSession)
             {
                 newSession = false;
@@ -160,7 +161,7 @@ namespace Data
 
             content = content.TrimEnd();
             content = content.Remove(content.Length - 1, 1);
-         
+
             if (content.Length == 1)
             {
                 content = String.Format("{0}\n{1}\n]\n", content.Trim(), newJsonObject);
@@ -177,15 +178,12 @@ namespace Data
         }
 
 
-        public override BallColisionInfo GetBallColisionInfo(IBall ball,double v1x,double v1y, IBall secondBall,double v2x,double v2y)
+        public override BallCollisionInfo GetBallColisionInfo(IBall ball, double v1x, double v1y, IBall secondBall, double v2x, double v2y)
         {
-            return new BallColisionInfo(ball,v1x,v1y, secondBall, v2x,  v2y);
+            return new BallCollisionInfo(ball, v1x, v1y, secondBall, v2x, v2y);
         }
 
-        public override WallColisionInfo GetWallColisionInfo(IBall ball, double oldNewX, double oldNewY)
-        {
-            return new WallColisionInfo(ball,oldNewX,oldNewY);
-        }
+
 
 
         internal async Task CallLogger(int interval, IList Balls)

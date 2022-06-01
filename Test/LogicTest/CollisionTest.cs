@@ -14,10 +14,10 @@ namespace TestLogic
             LApi.CreateBalls(1);
             double oldX = LApi.GetBall(0).NewY;
             bool contin = true;
-            while(contin)
+            while (contin)
             {
                 LApi.GetBall(0).Move(1);
-                if(oldX != LApi.GetBall(0).NewY)
+                if (oldX != LApi.GetBall(0).NewY)
                 {
                     contin = false;
                 }
