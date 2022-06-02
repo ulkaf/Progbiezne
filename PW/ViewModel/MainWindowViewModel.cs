@@ -136,6 +136,7 @@ namespace ViewModel
                 isRunEnabled = true;
                 isDeleteEnabled = true;
                 Balls = ModelLayer.Create(BallVal);
+                BallVal = 1;
             }
 
             if (size <= 0)
@@ -143,18 +144,20 @@ namespace ViewModel
                 size = 0;
                 isRunEnabled = false;
                 isDeleteEnabled = false;
+                BallVal = 1;
             }
 
 
             if (size == 25)
             {
                 isAddEnabled = false;
+                BallVal = 1;
             }
             if (size > 25)
             {
                 size -= BallVal;
+                BallVal = 25 - size;
             }
-            BallVal = 1;
 
         }
 
