@@ -17,8 +17,8 @@ namespace Data
         private readonly double weight;
         private readonly Stopwatch stopwatch;
         private bool stop;
-
-
+        private int ballCollisionCount;
+        private int wallCollisionCount;
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
             id = identyfikator;
@@ -30,10 +30,14 @@ namespace Data
             this.weight = weight;
             stop = false;
             stopwatch = new Stopwatch();
+            ballCollisionCount = 0;
+            wallCollisionCount = 0;
         }
 
         public int ID { get => id; }
         public int Size { get => size; }
+
+
         public double NewX
         {
             get => newX;
@@ -88,7 +92,32 @@ namespace Data
                 RaisePropertyChanged();
             }
         }
+        public int WallCollisionCount
+        {
+            get => wallCollisionCount;
+            set
+            {
+                if (value.Equals(wallCollisionCount))
+                {
+                    return;
+                }
 
+                wallCollisionCount = value;
+            }
+        }
+        public int BallCollisionCount
+        {
+            get => ballCollisionCount;
+            set
+            {
+                if (value.Equals(ballCollisionCount))
+                {
+                    return;
+                }
+
+                ballCollisionCount = value;
+            }
+        }
         public void Move(double time)
         {
 

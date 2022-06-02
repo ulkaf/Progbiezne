@@ -131,7 +131,7 @@ namespace ViewModel
         private void AddBalls()
         {
             size += BallVal;
-            if (size > 0 && size <= 50)
+            if (size > 0 && size <= 25)
             {
                 isRunEnabled = true;
                 isDeleteEnabled = true;
@@ -146,11 +146,11 @@ namespace ViewModel
             }
 
 
-            if (size == 50)
+            if (size == 25)
             {
                 isAddEnabled = false;
             }
-            if (size > 50)
+            if (size > 25)
             {
                 size -= BallVal;
             }
@@ -162,7 +162,7 @@ namespace ViewModel
         private void DeleteBalls()
         {
             size -= BallVal;
-            if (size >= 0 && size <= 50)
+            if (size >= 0 && size <= 25)
             {
                 isRunEnabled = true;
                 isAddEnabled = true;

@@ -2,27 +2,22 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Text.Json;
 
 namespace Logic
 {
     internal class LogicApi : LogicAbstractApi
     {
         private readonly DataAbstractApi dataLayer;
-        private readonly string logPath = "ball_log.json";
-        private readonly object locker = new object();
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
             Width = width;
             Height = height;
-
         }
 
         public override int Width { get; }
         public override int Height { get; }
-
         public override void Start()
         {
             for (int i = 0; i < dataLayer.GetCount; i++)
@@ -32,7 +27,6 @@ namespace Logic
             }
             dataLayer.CreateLoggingTask(1000, dataLayer.GetBalls());
         }
-
         public override void Stop()
         {
             for (int i = 0; i < dataLayer.GetCount; i++)
@@ -61,26 +55,20 @@ namespace Logic
         {
             return dataLayer.GetBall(index);
         }
-
-
         public override int GetCount { get => dataLayer.GetCount; }
-
 
         internal void WallCollision(IBall ball)
         {
 
             double diameter = ball.Size;
-
             double right = Width - diameter;
-
             double down = Height - diameter;
-
-
             if (ball.X <= 5)
             {
                 if (ball.NewX <= 0)
                 {
                     ball.NewX = -ball.NewX;
+                    ball.WallCollisionCount++;
 
                 }
             }
@@ -90,7 +78,7 @@ namespace Logic
                 if (ball.NewX > 0)
                 {
                     ball.NewX = -ball.NewX;
-
+                    ball.WallCollisionCount++;
                 }
             }
             if (ball.Y <= 5)
@@ -98,7 +86,7 @@ namespace Logic
                 if (ball.NewY <= 0)
                 {
                     ball.NewY = -ball.NewY;
-
+                    ball.WallCollisionCount++;
                 }
             }
 
@@ -107,13 +95,9 @@ namespace Logic
                 if (ball.NewY > 0)
                 {
                     ball.NewY = -ball.NewY;
-
+                    ball.WallCollisionCount++;
                 }
             }
-
-
-
-
         }
 
         internal void BallBounce(IBall ball)
@@ -137,43 +121,42 @@ namespace Logic
                         return;
                     }
 
-                    double m1 = ball.Weight;
-                    double m2 = secondBall.Weight;
-                    double v1x = ball.NewX;
-                    double v1y = ball.NewY;
-                    double v2x = secondBall.NewX;
-                    double v2y = secondBall.NewY;
-
-
-
-                    double u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
-                    double u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
-
-                    double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
-                    double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
-
-                    lock (locker)
-
+                    lock (ball)
                     {
+                        double u1x;
+                        double u1y;
+                        double m1 = ball.Weight;
+                        double v1x = ball.NewX;
+                        double v1y = ball.NewY;
+
+                        lock (secondBall)
+                        {
+
+                            double m2 = secondBall.Weight;
+                            double v2x = secondBall.NewX;
+                            double v2y = secondBall.NewY;
+
+
+                            u1x = (m1 - m2) * v1x / (m1 + m2) + (2 * m2) * v2x / (m1 + m2);
+                            u1y = (m1 - m2) * v1y / (m1 + m2) + (2 * m2) * v2y / (m1 + m2);
+
+
+                            double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
+                            double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
+
+                            secondBall.NewX = u2x;
+                            secondBall.NewY = u2y;
+                            secondBall.BallCollisionCount++;
+
+                        }
+
                         ball.NewX = u1x;
                         ball.NewY = u1y;
-                        secondBall.NewX = u2x;
-                        secondBall.NewY = u2y;
-
-                        var options = new JsonSerializerOptions { WriteIndented = true };
-                        string jsonCollisionInfo = JsonSerializer.Serialize(dataLayer.GetBallColisionInfo(ball, v1x, v1y, secondBall, v2x, v2y), options);
-                        string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
-                        string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"BallCollision\":{1}\n", now, jsonCollisionInfo) + "}";
-
-                        dataLayer.AppendObjectToJSONFile(logPath, newJsonObject);
+                        ball.BallCollisionCount++;
 
                     }
                     return;
-
                 }
-
-
-
             }
 
         }
@@ -199,16 +182,11 @@ namespace Logic
             return Math.Sqrt((Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2)));
         }
 
-
-
-
         internal void BallPositionChanged(object sender, PropertyChangedEventArgs args)
         {
             IBall ball = (IBall)sender;
             WallCollision(ball);
             BallBounce(ball);
         }
-
-
     }
 }

@@ -11,10 +11,7 @@ namespace Data
     internal class DataApi : DataAbstractApi
     {
         private ObservableCollection<IBall> balls { get; }
-
-
         private readonly Random random = new Random();
-        private readonly object locker = new object();
         private readonly Stopwatch stopwatch;
         private readonly string logPath = "ball_log.json";
         private bool newSession;
@@ -22,10 +19,6 @@ namespace Data
 
         public override int Width { get; }
         public override int Height { get; }
-
-
-
-
 
         public DataApi(int width, int height)
         {
@@ -177,15 +170,6 @@ namespace Data
             }
         }
 
-
-        public override ICollisionInfo GetBallColisionInfo(IBall ball, double v1x, double v1y, IBall secondBall, double v2x, double v2y)
-        {
-            return new BallCollisionInfo(ball, v1x, v1y, secondBall, v2x, v2y);
-        }
-
-
-
-
         internal async Task CallLogger(int interval, IList Balls)
         {
             while (!stop)
@@ -197,10 +181,8 @@ namespace Data
                 string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
 
                 string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
-                lock (locker)
-                {
-                    AppendObjectToJSONFile(logPath, newJsonObject);
-                }
+
+                AppendObjectToJSONFile(logPath, newJsonObject);
                 stopwatch.Stop();
                 await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
             }
