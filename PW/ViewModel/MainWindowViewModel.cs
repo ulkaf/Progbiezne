@@ -165,16 +165,18 @@ namespace ViewModel
         private void DeleteBalls()
         {
             size -= BallVal;
+            Balls = ModelLayer.Delete(BallVal);
             if (size >= 0 && size <= 25)
             {
                 isRunEnabled = true;
                 isAddEnabled = true;
-                Balls = ModelLayer.Delete(BallVal);
+                
             }
 
             if (size <= 0)
             {
                 size = 0;
+                isAddEnabled = true;
                 isRunEnabled = false;
                 isDeleteEnabled = false;
             }
