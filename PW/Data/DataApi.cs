@@ -128,7 +128,7 @@ namespace Data
 
                     lock (this)
                     {
-                        File.AppendAllText("BallsLogQueue.json", log);
+                        File.AppendAllText(logPath, log);
                     }
                 }
                 else

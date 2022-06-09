@@ -18,7 +18,6 @@ namespace Data
         private readonly double weight;
         private readonly Stopwatch stopwatch;
         private bool stop;
-
         private readonly object locker = new object();
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
@@ -51,7 +50,11 @@ namespace Data
 
         public double NewX
         {
-            get => newX;
+            get
+            {
+                lock (locker) { return newX; }
+            }
+            
             private set
             {
                 if (value.Equals(newX))
@@ -64,7 +67,10 @@ namespace Data
         }
         public double NewY
         {
-            get => newY;
+            get
+            {
+                lock (locker) { return newY; }
+            }
             private set
             {
                 if (value.Equals(newY))
@@ -77,7 +83,10 @@ namespace Data
         }
         public double X
         {
-            get => x;
+            get
+            {
+                lock (locker) { return x; }
+            }
             private set
             {
                 if (value.Equals(x))
@@ -91,7 +100,10 @@ namespace Data
         }
         public double Y
         {
-            get => y;
+            get
+            {
+                lock (locker) { return y; }
+            }
             private set
             {
                 if (value.Equals(y))
