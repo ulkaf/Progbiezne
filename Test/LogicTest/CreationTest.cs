@@ -22,7 +22,7 @@ namespace TestLogic
             LApi = LogicAbstractApi.CreateApi(800, 600);
             Assert.AreEqual(800, LApi.Width);
             Assert.AreEqual(600, LApi.Height);
-          
+
         }
 
         [TestMethod]

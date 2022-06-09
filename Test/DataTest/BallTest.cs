@@ -41,7 +41,7 @@ namespace TestData
             b.Move(1, queue);
             Assert.AreNotEqual(x, b.X);
             Assert.AreNotEqual(y, b.Y);
-;
+            ;
         }
 
 

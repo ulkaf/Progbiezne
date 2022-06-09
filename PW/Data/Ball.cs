@@ -19,7 +19,7 @@ namespace Data
         private readonly Stopwatch stopwatch;
         private bool stop;
 
-        private object locker = new object();  
+        private readonly object locker = new object();
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
             id = identyfikator;
@@ -33,19 +33,19 @@ namespace Data
             stopwatch = new Stopwatch();
 
         }
- 
+
         public int ID { get => id; }
         public int Size { get => size; }
         public double Weight { get => weight; }
 
         public void changeVelocity(double Vx, double Vy)
         {
-            lock(locker)
+            lock (locker)
             {
                 NewX = Vx;
                 NewY = Vy;
-       
-           
+
+
             }
         }
 
@@ -86,7 +86,7 @@ namespace Data
                 }
 
                 x = value;
-             
+
             }
         }
         public double Y
@@ -100,7 +100,7 @@ namespace Data
                 }
 
                 y = value;
-       
+
             }
         }
 

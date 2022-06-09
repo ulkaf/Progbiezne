@@ -1,12 +1,11 @@
-﻿using Data;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Logic
 {
     public abstract class LogicAbstractApi
     {
 
-      
+
         public abstract IList CreateBalls(int count);
         public abstract IList DeleteBalls(int count);
         public abstract void Start();

@@ -170,7 +170,7 @@ namespace ViewModel
             {
                 isRunEnabled = true;
                 isAddEnabled = true;
-                
+
             }
 
             if (size <= 0)

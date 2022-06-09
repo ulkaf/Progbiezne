@@ -12,7 +12,7 @@ namespace Logic
         private readonly DataAbstractApi dataLayer;
         private ObservableCollection<IBall> balls { get; }
 
-        private ConcurrentQueue<IBall> queue;
+        private readonly ConcurrentQueue<IBall> queue;
 
         public LogicApi(int width, int height)
         {
@@ -29,7 +29,7 @@ namespace Logic
         {
             for (int i = 0; i < balls.Count; i++)
             {
-                balls[i].PropertyChanged += BallPositionChanged;  
+                balls[i].PropertyChanged += BallPositionChanged;
                 balls[i].CreateMovementTask(30, queue);
             }
             dataLayer.CreateLoggingTask(queue);
@@ -37,31 +37,31 @@ namespace Logic
         }
         public override void Stop()
         {
-            for (int i = 0; i <balls.Count; i++)
+            for (int i = 0; i < balls.Count; i++)
             {
                 balls[i].Stop();
                 balls[i].PropertyChanged -= BallPositionChanged;
 
             }
-            
+
         }
 
 
         public override IList CreateBalls(int count)
         {
-           int liczba = balls.Count;
+            int liczba = balls.Count;
 
-            for (int i = liczba; i < liczba+ count; i++)
+            for (int i = liczba; i < liczba + count; i++)
             {
                 bool contain = true;
                 bool licz;
-                
-               
+
+
                 while (contain)
                 {
                     balls.Add(dataLayer.CreateBall(i + 1));
                     licz = false;
-                    for (int j = 0; j < i ; j++)
+                    for (int j = 0; j < i; j++)
                     {
 
                         if (balls[i].X <= balls[j].X + balls[j].Size && balls[i].X + balls[i].Size >= balls[j].X)
@@ -80,9 +80,9 @@ namespace Logic
                         contain = false;
                     }
                 }
- 
-               
-              
+
+
+
 
             }
             return balls;
@@ -101,7 +101,7 @@ namespace Logic
             }
             return balls;
         }
-      
+
 
         internal void WallCollision(IBall ball)
         {
@@ -114,7 +114,7 @@ namespace Logic
                 if (ball.NewX <= 0)
                 {
                     ball.changeVelocity(-ball.NewX, ball.NewY);
-              
+
 
                 }
             }
@@ -123,7 +123,7 @@ namespace Logic
             {
                 if (ball.NewX > 0)
                 {
-                    ball.changeVelocity(-ball.NewX, ball.NewY );
+                    ball.changeVelocity(-ball.NewX, ball.NewY);
                 }
             }
             if (ball.Y <= 5)
@@ -145,35 +145,38 @@ namespace Logic
 
         internal void BallBounce(IBall ball)
         {
-            for (int i = 0; i <balls.Count; i++)
+            lock (ball)
             {
-                IBall secondBall = balls[i];
-                if (ball.ID == secondBall.ID)
+                for (int i = 0; i < balls.Count; i++)
                 {
-                    continue;
-                }
-
-                if (Collision(ball, secondBall))
-                {
-                    double relativeX = ball.X - secondBall.X;
-                    double relativeY = ball.Y - secondBall.Y;
-                    double relativeNewX = ball.NewX - secondBall.NewX;
-                    double relativeNewY = ball.NewY - secondBall.NewY;
-                    if (relativeX * relativeNewX + relativeY * relativeNewY > 0)
+                    IBall secondBall = balls[i];
+                    if (ball.ID == secondBall.ID)
                     {
-                        return;
+                        continue;
                     }
 
-                    lock (ball)
+                    lock (secondBall)
                     {
-                        double u1x;
-                        double u1y;
-                        double m1 = ball.Weight;
-                        double v1x = ball.NewX;
-                        double v1y = ball.NewY;
 
-                        lock (secondBall)
+                        if (Collision(ball, secondBall))
                         {
+                            double relativeX = ball.X - secondBall.X;
+                            double relativeY = ball.Y - secondBall.Y;
+                            double relativeNewX = ball.NewX - secondBall.NewX;
+                            double relativeNewY = ball.NewY - secondBall.NewY;
+                            if (relativeX * relativeNewX + relativeY * relativeNewY > 0)
+                            {
+                                return;
+                            }
+
+
+                            double u1x;
+                            double u1y;
+                            double m1 = ball.Weight;
+                            double v1x = ball.NewX;
+                            double v1y = ball.NewY;
+
+
 
                             double m2 = secondBall.Weight;
                             double v2x = secondBall.NewX;
@@ -188,15 +191,18 @@ namespace Logic
                             double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
 
                             secondBall.changeVelocity(u2x, u2y);
+                            ball.changeVelocity(u1x, u1y);
 
                         }
 
-                        ball.changeVelocity(u1x, u1y);
+
 
                     }
-                    return;
+
                 }
+
             }
+            return;
 
         }
 

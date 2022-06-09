@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -11,10 +9,10 @@ namespace Data
 {
     internal class DataApi : DataAbstractApi
     {
-      
+
         private readonly Random random = new Random();
         private readonly Stopwatch stopwatch;
-        private readonly string logPath = "ball_log.json";
+        private readonly string logPath = "Log.json";
         private bool newSession;
         private bool stop;
 
@@ -23,7 +21,7 @@ namespace Data
 
         public DataApi(int width, int height)
         {
-         
+
             Width = width;
             Height = height;
             newSession = true;
@@ -35,23 +33,23 @@ namespace Data
         public override IBall CreateBall(int count)
         {
 
-        
-                    int radius = 30;
-                    double weight = radius;
 
-                    double x = random.Next(radius + 20, Width - radius - 20);
-                    double y = random.Next(radius + 20, Height - radius - 20);
-                    double newX = 0;
-                    double newY = 0;
-                    while (newX == 0)
-                    {
-                        newX = random.Next(-5, 5) + random.NextDouble();
-                    }
-                    while (newY == 0)
-                    {
-                        newY = random.Next(-5, 5) + random.NextDouble();
-                    }
-                    Ball ball = new Ball(count, radius, x, y, newX, newY, weight);
+            int radius = 30;
+            double weight = radius;
+
+            double x = random.Next(radius + 20, Width - radius - 20);
+            double y = random.Next(radius + 20, Height - radius - 20);
+            double newX = 0;
+            double newY = 0;
+            while (newX == 0)
+            {
+                newX = random.Next(-5, 5) + random.NextDouble();
+            }
+            while (newY == 0)
+            {
+                newY = random.Next(-5, 5) + random.NextDouble();
+            }
+            Ball ball = new Ball(count, radius, x, y, newX, newY, weight);
 
             return ball;
         }
@@ -68,14 +66,19 @@ namespace Data
             return CallLogger(logQueue);
         }
 
-        public override void AppendObjectToJSONFile(string filename, string newJsonObject)
+        internal void FileMaker(string filename)
         {
-
             if (File.Exists(filename) && newSession)
             {
                 newSession = false;
                 File.Delete(filename);
             }
+        }
+
+        public override void AppendObjectToJSONFile(string filename, string newJsonObject)
+        {
+
+
 
             using (StreamWriter sw = new StreamWriter(filename, true))
             {
@@ -108,6 +111,10 @@ namespace Data
 
         internal async Task CallLogger(ConcurrentQueue<IBall> logQueue)
         {
+            FileMaker(logPath);
+            string diagnostics;
+            string date;
+            string log;
             while (!stop)
             {
                 stopwatch.Reset();
@@ -115,9 +122,9 @@ namespace Data
                 logQueue.TryDequeue(out IBall logObject);
                 if (logObject != null)
                 {
-                    string diagnostics = JsonSerializer.Serialize(logObject);
-                    string date = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
-                    string log = "{" + String.Format("\n\t\"Date\": \"{0}\",\n\t\"Info\":{1}\n", date, diagnostics) + "}";
+                    diagnostics = JsonSerializer.Serialize(logObject);
+                    date = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+                    log = "{" + String.Format("\n\t\"Date\": \"{0}\",\n\t\"Info\":{1}\n", date, diagnostics) + "}";
 
                     lock (this)
                     {
