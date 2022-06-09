@@ -17,27 +17,21 @@ namespace TestLogic
         }
 
         [TestMethod]
-        public void getCount()
+        public void getWidthHeightTest()
         {
-            /*LApi = LogicAbstractApi.CreateApi(800, 600);
+            LApi = LogicAbstractApi.CreateApi(800, 600);
             Assert.AreEqual(800, LApi.Width);
             Assert.AreEqual(600, LApi.Height);
-            LApi.CreateBalls(5);
-            Assert.AreEqual(5, LApi.Balls.Count);
-            LApi.DeleteBalls(3);
-            Assert.AreEqual(2, LApi.GetCount);
-            LApi.DeleteBalls(3);
-            Assert.AreEqual(0, LApi.GetCount);*/
+          
         }
 
         [TestMethod]
-        public void getBall()
+        public void createDeleteTest()
         {
-            /*LApi = LogicAbstractApi.CreateApi(800, 600);
-            LApi.CreateBalls(3);
-            Assert.AreNotEqual(LApi.GetBall(0), LApi.GetBall(1));
-            Assert.AreNotEqual(LApi.GetBall(1), LApi.GetBall(2));
-            Assert.AreNotEqual(LApi.GetBall(0), LApi.GetBall(2));*/
+            LApi = LogicAbstractApi.CreateApi(800, 600);
+            Assert.AreEqual(5, LApi.CreateBalls(5).Count);
+            Assert.AreEqual(2, LApi.DeleteBalls(3).Count);
+            Assert.AreEqual(0, LApi.DeleteBalls(3).Count);
         }
 
     }
