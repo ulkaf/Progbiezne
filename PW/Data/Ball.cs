@@ -18,8 +18,7 @@ namespace Data
         private readonly double weight;
         private readonly Stopwatch stopwatch;
         private bool stop;
-        private int ballCollisionCount;
-        private int wallCollisionCount;
+
         private object locker = new object();  
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
@@ -32,22 +31,21 @@ namespace Data
             this.weight = weight;
             stop = false;
             stopwatch = new Stopwatch();
-            ballCollisionCount = 0;
-            wallCollisionCount = 0;
-        }
 
+        }
+ 
         public int ID { get => id; }
         public int Size { get => size; }
         public double Weight { get => weight; }
 
-        public void changeVelocity(double Vx, double Vy, bool collisionType)
+        public void changeVelocity(double Vx, double Vy)
         {
             lock(locker)
             {
                 NewX = Vx;
                 NewY = Vy;
-                if (collisionType) wallCollisionCount++;
-                else ballCollisionCount++;
+       
+           
             }
         }
 
@@ -88,7 +86,7 @@ namespace Data
                 }
 
                 x = value;
-                //RaisePropertyChanged();
+             
             }
         }
         public double Y
@@ -102,22 +100,14 @@ namespace Data
                 }
 
                 y = value;
-               // RaisePropertyChanged();
+       
             }
         }
-        public int WallCollisionCount
-        {
-            get => wallCollisionCount;
-          
-        }
-        public int BallCollisionCount
-        {
-            get => ballCollisionCount;
-         
-        }
+
+
         public void SaveRequest(ConcurrentQueue<IBall> queue)
         {
-            queue.Enqueue(new Ball(this.ID, this.Size, this.X, this.Y, this.NewX, this.NewY,  this.Weight));
+            queue.Enqueue(new Ball(ID, Size, X, Y, NewX, NewY, Weight));
         }
         public void Move(double time, ConcurrentQueue<IBall> queue)
         {

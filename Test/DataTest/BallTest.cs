@@ -36,14 +36,12 @@ namespace TestData
             IBall b = DApi.CreateBall(1);
             double x = b.X;
             double y = b.Y;
-            b.changeVelocity(5, 5, true);
+            b.changeVelocity(5, 5);
             ConcurrentQueue<IBall> queue = new ConcurrentQueue<IBall>();
             b.Move(1, queue);
             Assert.AreNotEqual(x, b.X);
             Assert.AreNotEqual(y, b.Y);
-            Assert.AreEqual(1, b.WallCollisionCount);
-            b.changeVelocity(-15, 10, false);
-            Assert.AreEqual(1, b.BallCollisionCount);
+;
         }
 
 

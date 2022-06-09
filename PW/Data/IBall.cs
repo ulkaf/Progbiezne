@@ -13,9 +13,7 @@ namespace Data
         double Y { get; }
         double NewX { get; }
         double NewY { get; }
-        int WallCollisionCount { get; }
-        int BallCollisionCount { get; }
-        void changeVelocity(double Vx, double Vy, bool collisionType);
+        void changeVelocity(double Vx, double Vy);
         void Move(double time, ConcurrentQueue<IBall> queue);
         Task CreateMovementTask(int interval, ConcurrentQueue<IBall> queue);
         void SaveRequest(ConcurrentQueue<IBall> queue);

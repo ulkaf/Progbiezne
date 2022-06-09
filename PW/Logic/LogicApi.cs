@@ -49,9 +49,9 @@ namespace Logic
 
         public override IList CreateBalls(int count)
         {
-           
+           int liczba = balls.Count;
 
-            for (int i = 0; i < count; i++)
+            for (int i = liczba; i < liczba+ count; i++)
             {
                 bool contain = true;
                 bool licz;
@@ -61,7 +61,7 @@ namespace Logic
                 {
                     balls.Add(dataLayer.CreateBall(i + 1));
                     licz = false;
-                    for (int j = 0; j < i; j++)
+                    for (int j = 0; j < i ; j++)
                     {
 
                         if (balls[i].X <= balls[j].X + balls[j].Size && balls[i].X + balls[i].Size >= balls[j].X)
@@ -113,7 +113,7 @@ namespace Logic
             {
                 if (ball.NewX <= 0)
                 {
-                    ball.changeVelocity(-ball.NewX, ball.NewY, true);
+                    ball.changeVelocity(-ball.NewX, ball.NewY);
               
 
                 }
@@ -123,14 +123,14 @@ namespace Logic
             {
                 if (ball.NewX > 0)
                 {
-                    ball.changeVelocity(-ball.NewX, ball.NewY, true);
+                    ball.changeVelocity(-ball.NewX, ball.NewY );
                 }
             }
             if (ball.Y <= 5)
             {
                 if (ball.NewY <= 0)
                 {
-                    ball.changeVelocity(ball.NewX, -ball.NewY, true);
+                    ball.changeVelocity(ball.NewX, -ball.NewY);
                 }
             }
 
@@ -138,7 +138,7 @@ namespace Logic
             {
                 if (ball.NewY > 0)
                 {
-                    ball.changeVelocity(ball.NewX, -ball.NewY, true);
+                    ball.changeVelocity(ball.NewX, -ball.NewY);
                 }
             }
         }
@@ -187,11 +187,11 @@ namespace Logic
                             double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
                             double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
 
-                            secondBall.changeVelocity(u2x, u2y, false);
+                            secondBall.changeVelocity(u2x, u2y);
 
                         }
 
-                        ball.changeVelocity(u1x, u1y, false);
+                        ball.changeVelocity(u1x, u1y);
 
                     }
                     return;
