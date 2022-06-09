@@ -29,7 +29,7 @@ namespace Logic
         {
             for (int i = 0; i < balls.Count; i++)
             {
-               
+                balls[i].PropertyChanged += BallPositionChanged;  
                 balls[i].CreateMovementTask(30, queue);
             }
             dataLayer.CreateLoggingTask(queue);
@@ -40,6 +40,7 @@ namespace Logic
             for (int i = 0; i <balls.Count; i++)
             {
                 balls[i].Stop();
+                balls[i].PropertyChanged -= BallPositionChanged;
 
             }
             
@@ -49,11 +50,12 @@ namespace Logic
         public override IList CreateBalls(int count)
         {
            
-           
+
             for (int i = 0; i < count; i++)
             {
                 bool contain = true;
                 bool licz;
+                
                
                 while (contain)
                 {
@@ -78,9 +80,9 @@ namespace Logic
                         contain = false;
                     }
                 }
+ 
+               
               
-
-                balls[i].PropertyChanged += BallPositionChanged;
 
             }
             return balls;
@@ -111,7 +113,7 @@ namespace Logic
             {
                 if (ball.NewX <= 0)
                 {
-                    ball.changeVelocity(-ball.NewX, 0, true);
+                    ball.changeVelocity(-ball.NewX, ball.NewY, true);
               
 
                 }
@@ -121,14 +123,14 @@ namespace Logic
             {
                 if (ball.NewX > 0)
                 {
-                    ball.changeVelocity(-ball.NewX, 0, true);
+                    ball.changeVelocity(-ball.NewX, ball.NewY, true);
                 }
             }
             if (ball.Y <= 5)
             {
                 if (ball.NewY <= 0)
                 {
-                    ball.changeVelocity(0, -ball.NewY, true);
+                    ball.changeVelocity(ball.NewX, -ball.NewY, true);
                 }
             }
 
@@ -136,7 +138,7 @@ namespace Logic
             {
                 if (ball.NewY > 0)
                 {
-                    ball.changeVelocity(0, -ball.NewY, true);
+                    ball.changeVelocity(ball.NewX, -ball.NewY, true);
                 }
             }
         }
