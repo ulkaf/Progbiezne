@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Data
@@ -15,8 +16,9 @@ namespace Data
         int WallCollisionCount { get; }
         int BallCollisionCount { get; }
         void changeVelocity(double Vx, double Vy, bool collisionType);
-        void Move(double time);
-        Task CreateMovementTask(int interval);
+        void Move(double time, ConcurrentQueue<IBall> queue);
+        Task CreateMovementTask(int interval, ConcurrentQueue<IBall> queue);
+        void SaveRequest(ConcurrentQueue<IBall> queue);
         void Stop();
     }
 }

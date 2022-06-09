@@ -1,5 +1,7 @@
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Concurrent;
+
 namespace TestData
 {
 
@@ -35,7 +37,8 @@ namespace TestData
             double x = b.X;
             double y = b.Y;
             b.changeVelocity(5, 5, true);
-            b.Move(1);
+            ConcurrentQueue<IBall> queue = new ConcurrentQueue<IBall>();
+            b.Move(1, queue);
             Assert.AreNotEqual(x, b.X);
             Assert.AreNotEqual(y, b.Y);
             Assert.AreEqual(1, b.WallCollisionCount);

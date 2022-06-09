@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace Data
 
         public int ID { get => id; }
         public int Size { get => size; }
+        public double Weight { get => weight; }
 
         public void changeVelocity(double Vx, double Vy, bool collisionType)
         {
@@ -86,7 +88,7 @@ namespace Data
                 }
 
                 x = value;
-                RaisePropertyChanged();
+                //RaisePropertyChanged();
             }
         }
         public double Y
@@ -100,7 +102,7 @@ namespace Data
                 }
 
                 y = value;
-                RaisePropertyChanged();
+               // RaisePropertyChanged();
             }
         }
         public int WallCollisionCount
@@ -113,17 +115,21 @@ namespace Data
             get => ballCollisionCount;
          
         }
-        public void Move(double time)
+        public void SaveRequest(ConcurrentQueue<IBall> queue)
+        {
+            queue.Enqueue(new Ball(this.ID, this.Size, this.X, this.Y, this.NewX, this.NewY,  this.Weight));
+        }
+        public void Move(double time, ConcurrentQueue<IBall> queue)
         {
             lock (locker)
             {
                 X += NewX * time;
                 Y += NewY * time;
+                RaisePropertyChanged(nameof(X));
+                RaisePropertyChanged(nameof(Y));
+                SaveRequest(queue);
             }
         }
-
-
-        public double Weight { get => weight; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -131,13 +137,13 @@ namespace Data
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public Task CreateMovementTask(int interval)
+        public Task CreateMovementTask(int interval, ConcurrentQueue<IBall> queue)
         {
             stop = false;
-            return Run(interval);
+            return Run(interval, queue);
         }
 
-        private async Task Run(int interval)
+        private async Task Run(int interval, ConcurrentQueue<IBall> queue)
         {
             while (!stop)
             {
@@ -145,7 +151,7 @@ namespace Data
                 stopwatch.Start();
                 if (!stop)
                 {
-                    Move((interval - stopwatch.ElapsedMilliseconds) / 16);
+                    Move(((interval - stopwatch.ElapsedMilliseconds) / 16), queue);
                 }
                 stopwatch.Stop();
 

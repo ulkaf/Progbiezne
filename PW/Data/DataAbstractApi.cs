@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Data
@@ -11,11 +12,9 @@ namespace Data
         public abstract int Width { get; }
         public abstract int Height { get; }
    
-
-
         public abstract void StopLoggingTask();
 
-        public abstract Task CreateLoggingTask(int interval, IList Balls);
+        public abstract Task CreateLoggingTask(ConcurrentQueue<IBall> logQueue);
 
         public abstract void AppendObjectToJSONFile(string filename, string newJsonObject);
 

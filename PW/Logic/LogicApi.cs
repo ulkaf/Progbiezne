@@ -1,6 +1,7 @@
 ﻿using Data;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -11,6 +12,7 @@ namespace Logic
         private readonly DataAbstractApi dataLayer;
         private ObservableCollection<IBall> balls { get; }
 
+        private ConcurrentQueue<IBall> queue;
 
         public LogicApi(int width, int height)
         {
@@ -18,6 +20,7 @@ namespace Logic
             Width = width;
             Height = height;
             balls = new ObservableCollection<IBall>();
+            queue = new ConcurrentQueue<IBall>();
         }
 
         public override int Width { get; }
@@ -27,10 +30,10 @@ namespace Logic
             for (int i = 0; i < balls.Count; i++)
             {
                
-                balls[i].CreateMovementTask(30);
-
+                balls[i].CreateMovementTask(30, queue);
             }
-           
+            dataLayer.CreateLoggingTask(queue);
+
         }
         public override void Stop()
         {

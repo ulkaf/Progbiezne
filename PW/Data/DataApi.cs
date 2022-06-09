@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -52,21 +53,8 @@ namespace Data
                     }
                     Ball ball = new Ball(count, radius, x, y, newX, newY, weight);
 
-                   
-
-
-
             return ball;
         }
-
-
-      
-
-
-
-
-
-
 
 
         public override void StopLoggingTask()
@@ -74,12 +62,11 @@ namespace Data
             stop = true;
         }
 
-        public override Task CreateLoggingTask(int interval, IList Balls)
+        public override Task CreateLoggingTask(ConcurrentQueue<IBall> logQueue)
         {
             stop = false;
-            return CallLogger(interval, Balls);
+            return CallLogger(logQueue);
         }
-
 
         public override void AppendObjectToJSONFile(string filename, string newJsonObject)
         {
@@ -119,21 +106,30 @@ namespace Data
             }
         }
 
-        internal async Task CallLogger(int interval, IList Balls)
+        internal async Task CallLogger(ConcurrentQueue<IBall> logQueue)
         {
             while (!stop)
             {
                 stopwatch.Reset();
                 stopwatch.Start();
-                var options = new JsonSerializerOptions { WriteIndented = true };
-               // string jsonBalls = JsonSerializer.Serialize(balls, options);
-                string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+                logQueue.TryDequeue(out IBall logObject);
+                if (logObject != null)
+                {
+                    string diagnostics = JsonSerializer.Serialize(logObject);
+                    string date = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+                    string log = "{" + String.Format("\n\t\"Date\": \"{0}\",\n\t\"Info\":{1}\n", date, diagnostics) + "}";
 
-             //  string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
-
-               // AppendObjectToJSONFile(logPath, newJsonObject);
+                    lock (this)
+                    {
+                        File.AppendAllText("BallsLogQueue.json", log);
+                    }
+                }
+                else
+                {
+                    return;
+                }
                 stopwatch.Stop();
-                await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
+                await Task.Delay((int)(stopwatch.ElapsedMilliseconds));
             }
         }
     }
