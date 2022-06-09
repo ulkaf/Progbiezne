@@ -42,7 +42,6 @@ namespace Logic
             
         }
 
-        public ObservableCollection<IBall> Balls => balls;
 
         public override IList CreateBalls(int count)
         {
@@ -95,7 +94,7 @@ namespace Logic
                 };
 
             }
-            return Balls;
+            return balls;
         }
       
 

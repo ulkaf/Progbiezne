@@ -13,32 +13,34 @@ namespace TestData
         public void createIBallTest()
         {
             DApi = DataAbstractApi.CreateApi(800, 600);
-            DApi.CreateBallsList(1);
-            Assert.AreEqual(1, DApi.GetBall(0).ID);
+            IBall b = DApi.CreateBall(1);
+            Assert.AreEqual(1, b.ID);
 
-            Assert.IsTrue(DApi.GetBall(0).X >= DApi.GetBall(0).Size);
-            Assert.IsTrue(DApi.GetBall(0).X <= (DApi.Width - DApi.GetBall(0).Size));
-            Assert.IsTrue(DApi.GetBall(0).Y >= DApi.GetBall(0).Size);
-            Assert.IsTrue(DApi.GetBall(0).Y <= (DApi.Height - DApi.GetBall(0).Size));
+            Assert.IsTrue(b.X >= b.Size);
+            Assert.IsTrue(b.X <= (DApi.Width - b.Size));
+            Assert.IsTrue(b.Y >= b.Size);
+            Assert.IsTrue(b.Y <= (DApi.Height - b.Size));
 
-            Assert.AreEqual(30, DApi.GetBall(0).Size);
-            Assert.IsTrue(DApi.GetBall(0).Weight == DApi.GetBall(0).Size);
-            Assert.IsTrue(DApi.GetBall(0).NewX >= -5 && DApi.GetBall(0).NewX <= 6);
-            Assert.IsTrue(DApi.GetBall(0).NewY >= -5 && DApi.GetBall(0).NewY <= 6);
+            Assert.AreEqual(30, b.Size);
+            Assert.IsTrue(b.Weight == b.Size);
+            Assert.IsTrue(b.NewX >= -5 && b.NewX <= 6);
+            Assert.IsTrue(b.NewY >= -5 && b.NewY <= 6);
         }
 
         [TestMethod]
         public void moveTest()
         {
             DApi = DataAbstractApi.CreateApi(800, 600);
-            DApi.CreateBallsList(1);
-            double x = DApi.GetBall(0).X;
-            double y = DApi.GetBall(0).Y;
-            DApi.GetBall(0).NewX = 5;
-            DApi.GetBall(0).NewY = 5;
-            DApi.GetBall(0).Move(1);
-            Assert.AreNotEqual(x, DApi.GetBall(0).X);
-            Assert.AreNotEqual(y, DApi.GetBall(0).Y);
+            IBall b = DApi.CreateBall(1);
+            double x = b.X;
+            double y = b.Y;
+            b.changeVelocity(5, 5, true);
+            b.Move(1);
+            Assert.AreNotEqual(x, b.X);
+            Assert.AreNotEqual(y, b.Y);
+            Assert.AreEqual(1, b.WallCollisionCount);
+            b.changeVelocity(-15, 10, false);
+            Assert.AreEqual(1, b.BallCollisionCount);
         }
 
 
