@@ -109,8 +109,8 @@ namespace Logic
             {
                 if (ball.NewX <= 0)
                 {
-                    ball.NewX = -ball.NewX;
-                    ball.WallCollisionCount++;
+                    ball.changeVelocity(-ball.NewX, 0, true);
+              
 
                 }
             }
@@ -119,16 +119,14 @@ namespace Logic
             {
                 if (ball.NewX > 0)
                 {
-                    ball.NewX = -ball.NewX;
-                    ball.WallCollisionCount++;
+                    ball.changeVelocity(-ball.NewX, 0, true);
                 }
             }
             if (ball.Y <= 5)
             {
                 if (ball.NewY <= 0)
                 {
-                    ball.NewY = -ball.NewY;
-                    ball.WallCollisionCount++;
+                    ball.changeVelocity(0, -ball.NewY, true);
                 }
             }
 
@@ -136,8 +134,7 @@ namespace Logic
             {
                 if (ball.NewY > 0)
                 {
-                    ball.NewY = -ball.NewY;
-                    ball.WallCollisionCount++;
+                    ball.changeVelocity(0, -ball.NewY, true);
                 }
             }
         }
@@ -186,15 +183,11 @@ namespace Logic
                             double u2x = 2 * m1 * v1x / (m1 + m2) + (m2 - m1) * v2x / (m1 + m2);
                             double u2y = 2 * m1 * v1y / (m1 + m2) + (m2 - m1) * v2y / (m1 + m2);
 
-                            secondBall.NewX = u2x;
-                            secondBall.NewY = u2y;
-                            secondBall.BallCollisionCount++;
+                            secondBall.changeVelocity(u2x, u2y, false);
 
                         }
 
-                        ball.NewX = u1x;
-                        ball.NewY = u1y;
-                        ball.BallCollisionCount++;
+                        ball.changeVelocity(u1x, u1y, false);
 
                     }
                     return;

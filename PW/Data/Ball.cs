@@ -19,6 +19,7 @@ namespace Data
         private bool stop;
         private int ballCollisionCount;
         private int wallCollisionCount;
+        private object locker = new object();  
         public Ball(int identyfikator, int size, double x, double y, double newX, double newY, double weight)
         {
             id = identyfikator;
@@ -37,11 +38,21 @@ namespace Data
         public int ID { get => id; }
         public int Size { get => size; }
 
+        public void changeVelocity(double Vx, double Vy, bool collisionType)
+        {
+            lock(locker)
+            {
+                NewX = Vx;
+                NewY = Vy;
+                if (collisionType) wallCollisionCount++;
+                else ballCollisionCount++;
+            }
+        }
 
         public double NewX
         {
             get => newX;
-            set
+            private set
             {
                 if (value.Equals(newX))
                 {
@@ -54,7 +65,7 @@ namespace Data
         public double NewY
         {
             get => newY;
-            set
+            private set
             {
                 if (value.Equals(newY))
                 {
@@ -95,34 +106,20 @@ namespace Data
         public int WallCollisionCount
         {
             get => wallCollisionCount;
-            set
-            {
-                if (value.Equals(wallCollisionCount))
-                {
-                    return;
-                }
-
-                wallCollisionCount = value;
-            }
+          
         }
         public int BallCollisionCount
         {
             get => ballCollisionCount;
-            set
-            {
-                if (value.Equals(ballCollisionCount))
-                {
-                    return;
-                }
-
-                ballCollisionCount = value;
-            }
+         
         }
         public void Move(double time)
         {
-
-            X += NewX * time;
-            Y += NewY * time;
+            lock (locker)
+            {
+                X += NewX * time;
+                Y += NewY * time;
+            }
         }
 
 

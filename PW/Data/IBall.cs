@@ -10,10 +10,11 @@ namespace Data
         double Weight { get; }
         double X { get; }
         double Y { get; }
-        double NewX { get; set; }
-        double NewY { get; set; }
-        int WallCollisionCount { get; set; }
-        int BallCollisionCount { get; set; }
+        double NewX { get; }
+        double NewY { get; }
+        int WallCollisionCount { get; }
+        int BallCollisionCount { get; }
+        void changeVelocity(double Vx, double Vy, bool collisionType);
         void Move(double time);
         Task CreateMovementTask(int interval);
         void Stop();
