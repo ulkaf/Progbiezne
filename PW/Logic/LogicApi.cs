@@ -1,6 +1,7 @@
 ﻿using Data;
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Logic
@@ -8,54 +9,95 @@ namespace Logic
     internal class LogicApi : LogicAbstractApi
     {
         private readonly DataAbstractApi dataLayer;
+        private ObservableCollection<IBall> balls { get; }
+
 
         public LogicApi(int width, int height)
         {
             dataLayer = DataAbstractApi.CreateApi(width, height);
             Width = width;
             Height = height;
+            balls = new ObservableCollection<IBall>();
         }
 
         public override int Width { get; }
         public override int Height { get; }
         public override void Start()
         {
-            for (int i = 0; i < dataLayer.GetCount; i++)
+            for (int i = 0; i < balls.Count; i++)
             {
-                dataLayer.GetBall(i).CreateMovementTask(30);
+               
+                balls[i].CreateMovementTask(30);
 
             }
-            dataLayer.CreateLoggingTask(1000, dataLayer.GetBalls());
+           
         }
         public override void Stop()
         {
-            for (int i = 0; i < dataLayer.GetCount; i++)
+            for (int i = 0; i <balls.Count; i++)
             {
-                dataLayer.GetBall(i).Stop();
+                balls[i].Stop();
 
             }
-            dataLayer.StopLoggingTask();
+            
         }
+
+        public ObservableCollection<IBall> Balls => balls;
+
         public override IList CreateBalls(int count)
         {
-            int previousCount = dataLayer.GetCount;
-            IList temp = dataLayer.CreateBallsList(count);
-            for (int i = 0; i < dataLayer.GetCount - previousCount; i++)
+           
+           
+            for (int i = 0; i < count; i++)
             {
-                dataLayer.GetBall(previousCount + i).PropertyChanged += BallPositionChanged;
+                bool contain = true;
+                bool licz;
+               
+                while (contain)
+                {
+                    balls.Add(dataLayer.CreateBall(i + 1));
+                    licz = false;
+                    for (int j = 0; j < i; j++)
+                    {
+
+                        if (balls[i].X <= balls[j].X + balls[j].Size && balls[i].X + balls[i].Size >= balls[j].X)
+                        {
+                            if (balls[i].Y <= balls[j].Y + balls[j].Size && balls[i].Y + balls[i].Size >= balls[j].Y)
+                            {
+
+                                licz = true;
+                                balls.Remove(balls[i]);
+                                break;
+                            }
+                        }
+                    }
+                    if (!licz)
+                    {
+                        contain = false;
+                    }
+                }
+              
+
+                balls[i].PropertyChanged += BallPositionChanged;
+
             }
-            return temp;
+            return balls;
         }
 
         public override IList DeleteBalls(int count)
         {
-            return dataLayer.DeleteBalls(count);
+            for (int i = 0; i < count; i++)
+            {
+
+                if (balls.Count > 0)
+                {
+                    balls.Remove(balls[balls.Count - 1]);
+                };
+
+            }
+            return Balls;
         }
-        public override IBall GetBall(int index)
-        {
-            return dataLayer.GetBall(index);
-        }
-        public override int GetCount { get => dataLayer.GetCount; }
+      
 
         internal void WallCollision(IBall ball)
         {
@@ -102,9 +144,9 @@ namespace Logic
 
         internal void BallBounce(IBall ball)
         {
-            for (int i = 0; i < dataLayer.GetCount; i++)
+            for (int i = 0; i <balls.Count; i++)
             {
-                IBall secondBall = dataLayer.GetBall(i);
+                IBall secondBall = balls[i];
                 if (ball.ID == secondBall.ID)
                 {
                     continue;

@@ -10,7 +10,7 @@ namespace Data
 {
     internal class DataApi : DataAbstractApi
     {
-        private ObservableCollection<IBall> balls { get; }
+      
         private readonly Random random = new Random();
         private readonly Stopwatch stopwatch;
         private readonly string logPath = "ball_log.json";
@@ -22,53 +22,24 @@ namespace Data
 
         public DataApi(int width, int height)
         {
-            balls = new ObservableCollection<IBall>();
+         
             Width = width;
             Height = height;
             newSession = true;
             stopwatch = new Stopwatch();
         }
 
-        public ObservableCollection<IBall> Balls => balls;
 
-        public override IList CreateBallsList(int count)
+
+        public override IBall CreateBall(int count)
         {
 
-            if (count > 0)
-            {
-                int ballsCount = balls.Count;
-                for (int i = 0; i < count; i++)
-                {
+        
                     int radius = 30;
                     double weight = radius;
-                    bool contin = true;
-                    bool licz;
+
                     double x = random.Next(radius + 20, Width - radius - 20);
                     double y = random.Next(radius + 20, Height - radius - 20);
-
-
-
-
-                    while (contin)
-                    {
-                        licz = false;
-                        for (int j = 0; j < GetCount; j++)
-                        {
-                            if (x <= balls[j].X + balls[j].Size && x + radius >= balls[j].X)
-                            {
-                                if (y <= balls[j].Y + balls[j].Size && y + radius >= balls[j].Y)
-                                {
-                                    x = random.Next(radius + 20, Width - radius - 20);
-                                    licz = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!licz)
-                        {
-                            contin = false;
-                        }
-                    }
                     double newX = 0;
                     double newY = 0;
                     while (newX == 0)
@@ -79,45 +50,23 @@ namespace Data
                     {
                         newY = random.Next(-5, 5) + random.NextDouble();
                     }
-                    Ball ball = new Ball(i + 1 + ballsCount, radius, x, y, newX, newY, weight);
+                    Ball ball = new Ball(count, radius, x, y, newX, newY, weight);
 
-                    balls.Add(ball);
-
-                }
-            }
+                   
 
 
-            return balls;
+
+            return ball;
         }
 
-        public override IList DeleteBalls(int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
 
-                if (balls.Count > 0)
-                {
-                    balls.Remove(balls[balls.Count - 1]);
-                };
-
-            }
-            return Balls;
-
-
-        }
-        public override int GetCount { get => balls.Count; }
+      
 
 
 
-        public override IBall GetBall(int index)
-        {
-            return balls[index];
-        }
 
-        public override IList GetBalls()
-        {
-            return Balls;
-        }
+
+
 
 
         public override void StopLoggingTask()
@@ -177,12 +126,12 @@ namespace Data
                 stopwatch.Reset();
                 stopwatch.Start();
                 var options = new JsonSerializerOptions { WriteIndented = true };
-                string jsonBalls = JsonSerializer.Serialize(balls, options);
+               // string jsonBalls = JsonSerializer.Serialize(balls, options);
                 string now = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
 
-                string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
+             //  string newJsonObject = "{" + String.Format("\n\t\"datetime\": \"{0}\",\n\t\"balls\":{1}\n", now, jsonBalls) + "}";
 
-                AppendObjectToJSONFile(logPath, newJsonObject);
+               // AppendObjectToJSONFile(logPath, newJsonObject);
                 stopwatch.Stop();
                 await Task.Delay((int)(interval - stopwatch.ElapsedMilliseconds));
             }
